@@ -13,7 +13,7 @@ export const App = () => {
           <Route element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="example" element={<ExampleContent />} />
-          </Route>
+            </Route>
         </Routes>
       </Suspense>
     </>
