@@ -1,7 +1,5 @@
 import React, { useCallback, useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
-import { useDispatch, useSelector } from "react-redux";
-import { setTotalLength } from "../../redux/actions";
 import {
   Form,
   DropBoxStyled,
@@ -15,17 +13,11 @@ import {
   DropBoxInfo,
 } from "./DropBox.styled";
 
-export const DropBox = ({
-  localTotalLength: propLocalTotalLength,
-  setLocalTotalLength,
-}) => {
+export const DropBox = () => {
   const [files, setFiles] = useState([]);
   const [rejected, setRejected] = useState([]);
+  const [totalLength, setTotalLength] = useState(0);
   const [imageInfo, setImageInfo] = useState({});
-  // const [localTotalLength, setLocalTotalLength] = useState(0);
-
-  const dispatch = useDispatch();
-  const totalLength = useSelector((state) => state.totalLength);
 
   const onDrop = useCallback(
     (acceptedFiles, rejectedFiles) => {
@@ -42,7 +34,7 @@ export const DropBox = ({
             imageElement.onload = () => {
               const length = imageElement.height;
               const copies = "1";
-
+              setTotalLength((prevLength) => prevLength + length);
               setImageInfo((prevImageInfo) => ({
                 ...prevImageInfo,
                 [file.name]: { length: length, copies: copies },
@@ -85,8 +77,6 @@ export const DropBox = ({
     });
   };
 
-  let totalLengthTimesCopies = 0;
-
   useEffect(() => {
     const totalLengthTimesCopies = Object.values(imageInfo).reduce(
       (total, obj) => {
@@ -96,10 +86,8 @@ export const DropBox = ({
       },
       0
     );
-
-    setLocalTotalLength(totalLengthTimesCopies);
-    dispatch(setTotalLength(totalLengthTimesCopies));
-  }, [dispatch, imageInfo]);
+    setTotalLength(totalLengthTimesCopies);
+  }, [imageInfo]);
 
   const handleChange = (event, fileName) => {
     setImageInfo((prevImageInfo) => ({
@@ -122,8 +110,6 @@ export const DropBox = ({
     });
     return nbInMeters;
   };
-
-  console.log("totallength", totalLength);
 
   return (
     <Form>
@@ -161,6 +147,8 @@ export const DropBox = ({
           ))}
         </DropBoxList>
       </DropBoxStyled>
+      <p>Całkowita długość w pikselach: {totalLength} pikseli</p>
+      <p>Całkowita długość w metrach: {formatPxToMb(totalLength)} metrów</p>
       <PrintBtn type="button" onClick={handlePrint}>
         Wydrukuj
       </PrintBtn>

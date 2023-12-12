@@ -1,10 +1,10 @@
-import { FormComponent } from "../features/form/FormComponent";
+import { DropBox } from "../features/form/components/DropBox";
 
 const Form = () => {
   return (
     <>
       <div>
-        <FormComponent></FormComponent>
+        <DropBox />
       </div>
     </>
   );
