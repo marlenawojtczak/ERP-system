@@ -9,8 +9,8 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   const config = new DocumentBuilder();
-  config.setTitle('basic-backend-api');
-  config.setDescription('basic-backend-api');
+  config.setTitle('ERP-system API');
+  config.setDescription('ERP-system API');
   config.setVersion('1.0');
   config.addBearerAuth();
   config.build();
