@@ -10,6 +10,7 @@ import {
   REGISTER,
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import lengthReducer from "../src/features/redux/length-reducer";
 
 const persistConfig = {
   key: "root",
@@ -17,8 +18,10 @@ const persistConfig = {
   whitelist: [],
 };
 
+const persistedReducer = persistReducer(persistConfig, lengthReducer);
+
 export const store = configureStore({
-  reducer: {},
+  reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
