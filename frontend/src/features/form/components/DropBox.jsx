@@ -15,11 +15,14 @@ import {
   DropBoxInfo,
 } from "./DropBox.styled";
 
-export const DropBox = () => {
+export const DropBox = ({
+  localTotalLength: propLocalTotalLength,
+  setLocalTotalLength,
+}) => {
   const [files, setFiles] = useState([]);
   const [rejected, setRejected] = useState([]);
   const [imageInfo, setImageInfo] = useState({});
-  const [localTotalLength, setLocalTotalLength] = useState(0);
+  // const [localTotalLength, setLocalTotalLength] = useState(0);
 
   const dispatch = useDispatch();
   const totalLength = useSelector((state) => state.totalLength);
