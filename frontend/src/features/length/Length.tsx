@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/types";
 
-export const Length: React.FC = () => {
+export const Length = () => {
   const totalLength = useSelector((state: RootState) => state.totalLength);
 
   const formatPxToMb = (nbInPixels: number) => {
@@ -15,7 +15,7 @@ export const Length: React.FC = () => {
 
   return (
     <>
-      {/* <p>Całkowita długość w pikselach: {totalLength} pikseli</p> */}
+      <p>Całkowita długość w pikselach: {totalLength} pikseli</p>
       <p>Całkowita długość w metrach: {formatPxToMb(totalLength)} metrów</p>
     </>
   );
