@@ -12,7 +12,7 @@ export const DropBoxStyled = styled.div`
   margin-top: 10px;
   border: 2px dashed rgb(229, 229, 229);
   border-radius: 15px;
-  height: 600px;
+  height: 400px;
   width: 600px;
   display: flex;
   align-items: center;
