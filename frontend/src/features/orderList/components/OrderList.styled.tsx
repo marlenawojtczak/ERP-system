@@ -16,6 +16,7 @@ export const StyledInput = styled.input`
   border: none;
   border-radius: 5px;
   outline: none;
+  width: 400px;
 
   &:hover,
   &:focus {
@@ -24,7 +25,7 @@ export const StyledInput = styled.input`
 
 export const ButtonPanel = styled.div`
   display: flex;
-  gap: 20px;
+  gap: 30px;
 `;
 
 export const StyledButtons = styled.div`
@@ -81,7 +82,7 @@ export const ProjectList = styled.div`
   }
   .priority {
     border: 2px solid red;
-    box-shadow: 2px 2px 10px red;
+    box-shadow: 1px 1px 10px red;
   }
 `;
 
