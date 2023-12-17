@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
-  margin: 0 50px;
+  margin-left: 50px;
 `;
 
 export const ControlPanel = styled.div`
