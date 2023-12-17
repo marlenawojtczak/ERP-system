@@ -12,6 +12,8 @@ import {
 import storage from "redux-persist/lib/storage";
 import lengthReducer from "../src/features/redux/length-reducer";
 
+const isDevelopment = import.meta.env.MODE === "development";
+
 const persistConfig = {
   key: "root",
   storage,
@@ -28,7 +30,7 @@ export const store = configureStore({
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
     }),
-  devTools: process.env.NODE_ENV === "development",
+  devTools: isDevelopment,
 });
 
 export const persistor = persistStore(store);

@@ -14,6 +14,8 @@ import {
   PrintBtn,
   DropBoxInfo,
 } from "./DropBox.styled";
+import dotenv from "dotenv";
+dotenv.config();
 
 export const DropBox = ({
   localTotalLength: propLocalTotalLength,
@@ -28,41 +30,66 @@ export const DropBox = ({
   const totalLength = useSelector((state) => state.totalLength);
 
   const onDrop = useCallback(
-    (acceptedFiles, rejectedFiles) => {
-      if (acceptedFiles?.length) {
-        const newFiles = acceptedFiles.filter(
-          (file) =>
-            !files.some((existingFile) => existingFile.name === file.name)
-        );
-        const updatedFiles = newFiles.map((file) => {
-          const reader = new FileReader();
+    async (acceptedFiles, rejectedFiles) => {
+      if (acceptedFiles.length) {
+        const formData = new FormData();
 
-          reader.onload = () => {
-            const imageElement = new window.Image();
-            imageElement.onload = () => {
-              const length = imageElement.height;
-              const copies = "1";
-
-              setImageInfo((prevImageInfo) => ({
-                ...prevImageInfo,
-                [file.name]: { length: length, copies: copies },
-              }));
-            };
-            imageElement.src = reader.result;
-          };
-
-          reader.readAsDataURL(file);
-
-          return Object.assign(file, { preview: URL.createObjectURL(file) });
+        acceptedFiles.forEach((file) => {
+          formData.append("file", file);
         });
 
-        setFiles((previousFiles) => [...previousFiles, ...updatedFiles]);
+        const token = import.meta.env.VITE_AT_SECRET;
+
+        const headers = new Headers({
+          Authorization: `Bearer ${token}`,
+        });
+
+        try {
+          const response = await fetch(
+            "http://localhost:3000/api/file/upload",
+            {
+              method: "POST",
+              body: formData,
+              headers: headers,
+            }
+          );
+
+          if (response.ok) {
+            console.log("Pliki przesłane pomyślnie");
+          } else {
+            console.error("Błąd podczas przesyłania plików na serwer");
+          }
+        } catch (error) {
+          console.error("Błąd podczas przesyłania plików na serwer", error);
+        }
       }
 
-      if (rejectedFiles?.length) {
-        setRejected((previousFiles) => [...previousFiles, ...rejectedFiles]);
-        console.log("Wrong type of file");
-      }
+      const newFiles = acceptedFiles.filter(
+        (file) => !files.some((existingFile) => existingFile.name === file.name)
+      );
+      const updatedFiles = newFiles.map((file) => {
+        const reader = new FileReader();
+
+        reader.onload = () => {
+          const imageElement = new window.Image();
+          imageElement.onload = () => {
+            const length = imageElement.height;
+            const copies = "1";
+
+            setImageInfo((prevImageInfo) => ({
+              ...prevImageInfo,
+              [file.name]: { length: length, copies: copies },
+            }));
+          };
+          imageElement.src = reader.result;
+        };
+
+        reader.readAsDataURL(file);
+
+        return Object.assign(file, { preview: URL.createObjectURL(file) });
+      });
+
+      setFiles((previousFiles) => [...previousFiles, ...updatedFiles]);
     },
     [files]
   );

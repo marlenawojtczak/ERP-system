@@ -7,7 +7,9 @@ export class PrismaService
   extends PrismaClient
   implements OnModuleInit, OnModuleDestroy
 {
-  constructor(config: ConfigService) {
+  private isProduction: boolean;
+
+  constructor(private config: ConfigService) {
     super({
       datasources: {
         db: {
@@ -15,6 +17,8 @@ export class PrismaService
         },
       },
     });
+
+    this.isProduction = config.get<string>('NODE_ENV') === 'production';
   }
 
   async onModuleInit() {
@@ -26,7 +30,7 @@ export class PrismaService
   }
 
   async cleanDatabase() {
-    if (process.env.NODE_ENV === 'production') return;
+    if (this.isProduction) return;
 
     return Promise.all([this.user.deleteMany()]);
   }

@@ -1,3 +1,4 @@
+import { existsSync, mkdirSync } from 'fs';
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
@@ -17,6 +18,12 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config.build());
   SwaggerModule.setup('api', app, document);
+
+  const uploadsFolderPath = './uploads';
+
+  if (!existsSync(uploadsFolderPath)) {
+    mkdirSync(uploadsFolderPath);
+  }
 
   await app.listen(3000);
 }
