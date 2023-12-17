@@ -1,9 +1,9 @@
+import { OrderList } from "../features/calculators/components/OrderList";
+
 const Home = () => {
   return (
     <>
-      <div>
-        <h2>To jest strona domyślna, wyświetlająca listę zamówień</h2>
-      </div>
+      <OrderList />
     </>
   );
 };
