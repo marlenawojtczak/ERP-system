@@ -39,8 +39,13 @@ export const ButtonNow = styled.button`
   border-bottom-left-radius: 5px;
   cursor: pointer;
 
-  &:focus {
+  &.active {
     background-color: green;
+    color: white;
+    text-transform: uppercase;
+  }
+
+  &:hover {
   }
 `;
 
@@ -51,12 +56,13 @@ export const ButtonWeek = styled.button`
   border-bottom-right-radius: 5px;
   cursor: pointer;
 
-  &:hover {
+  &.active {
+    background-color: green;
+    color: white;
     text-transform: uppercase;
   }
-  &:focus {
-    background-color: green;
-    text-transform: uppercase;
+
+  &:hover {
   }
 `;
 
@@ -67,10 +73,15 @@ export const ButtonHere = styled(ButtonWeek)``;
 export const ProjectList = styled.div`
   height: 79vh;
   overflow: auto;
+
   ul {
     display: flex;
     flex-wrap: wrap;
     gap: 30px;
+  }
+  .priority {
+    border: 2px solid red;
+    box-shadow: 2px 2px 10px red;
   }
 `;
 

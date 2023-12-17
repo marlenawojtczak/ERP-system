@@ -16,27 +16,18 @@ import {
   ProjectIems,
 } from "./OrderList.styled";
 
-interface ProjectDetails {
-  Nazwa: string;
-  Termin: Date;
-  Metraż: string;
-  Wysyłka: string;
-  Zamówienie: number;
-}
-
-const formatDate = (date: Date) => {
-  return format(date, "dd/MM/yyyy");
-};
-
 const exampleProjects: [string, ProjectDetails][] = [
   [
     "ProjektX1",
     {
       Nazwa: "Shop1",
-      Termin: new Date("2023/01/01"),
+      Termin: new Date("2024/05/13"),
       Metraż: "6mb, r.40",
       Wysyłka: "paczkomat",
       Zamówienie: 20230101001,
+      naWynos: false,
+      uNas: true,
+      Priorytet: false,
     },
   ],
   [
@@ -47,6 +38,9 @@ const exampleProjects: [string, ProjectDetails][] = [
       Metraż: "4mb, r.40",
       Wysyłka: "paczkomat",
       Zamówienie: 20230202002,
+      naWynos: false,
+      uNas: true,
+      Priorytet: false,
     },
   ],
   [
@@ -57,6 +51,9 @@ const exampleProjects: [string, ProjectDetails][] = [
       Metraż: "4mb, r.40",
       Wysyłka: "paczkomat",
       Zamówienie: 3,
+      naWynos: false,
+      uNas: true,
+      Priorytet: false,
     },
   ],
   [
@@ -67,6 +64,9 @@ const exampleProjects: [string, ProjectDetails][] = [
       Metraż: "4mb, r.40",
       Wysyłka: "paczkomat",
       Zamówienie: 4,
+      naWynos: false,
+      uNas: true,
+      Priorytet: false,
     },
   ],
   [
@@ -77,6 +77,9 @@ const exampleProjects: [string, ProjectDetails][] = [
       Metraż: "4mb, r.40",
       Wysyłka: "paczkomat",
       Zamówienie: 5,
+      naWynos: false,
+      uNas: true,
+      Priorytet: true,
     },
   ],
   [
@@ -87,6 +90,9 @@ const exampleProjects: [string, ProjectDetails][] = [
       Metraż: "4mb, r.40",
       Wysyłka: "paczkomat",
       Zamówienie: 6,
+      naWynos: false,
+      uNas: true,
+      Priorytet: false,
     },
   ],
   [
@@ -97,46 +103,61 @@ const exampleProjects: [string, ProjectDetails][] = [
       Metraż: "4mb, r.40",
       Wysyłka: "paczkomat",
       Zamówienie: 7,
+      naWynos: false,
+      uNas: true,
+      Priorytet: false,
     },
   ],
   [
     "ProjektX8",
     {
       Nazwa: "Shop8",
-      Termin: new Date("2023/08/08"),
+      Termin: new Date("2023/12/18"),
       Metraż: "4mb, r.40",
       Wysyłka: "paczkomat",
       Zamówienie: 8,
+      naWynos: false,
+      uNas: true,
+      Priorytet: false,
     },
   ],
   [
     "ProjektX9",
     {
       Nazwa: "Shop9",
-      Termin: new Date("2023/09/09"),
+      Termin: new Date("2023/12/10"),
       Metraż: "4mb, r.40",
       Wysyłka: "paczkomat",
       Zamówienie: 9,
+      naWynos: false,
+      uNas: true,
+      Priorytet: true,
     },
   ],
   [
     "ProjektX10",
     {
       Nazwa: "Shop10",
-      Termin: new Date("2023/10/10"),
+      Termin: new Date("2023/12/10"),
       Metraż: "4mb, r.40",
       Wysyłka: "paczkomat",
       Zamówienie: 10,
+      naWynos: false,
+      uNas: true,
+      Priorytet: false,
     },
   ],
   [
     "ProjektX11",
     {
       Nazwa: "Shop11",
-      Termin: new Date("2023/11/11"),
+      Termin: new Date("2023/12/11"),
       Metraż: "4mb, r.40",
       Wysyłka: "paczkomat",
       Zamówienie: 11,
+      naWynos: false,
+      uNas: true,
+      Priorytet: false,
     },
   ],
   [
@@ -147,139 +168,214 @@ const exampleProjects: [string, ProjectDetails][] = [
       Metraż: "4mb, r.40",
       Wysyłka: "paczkomat",
       Zamówienie: 12,
+      naWynos: false,
+      uNas: true,
+      Priorytet: false,
     },
   ],
   [
     "ProjektX13",
     {
       Nazwa: "Shop13",
-      Termin: new Date("2023/01/13"),
+      Termin: new Date("2023/12/13"),
       Metraż: "4mb, r.40",
       Wysyłka: "paczkomat",
       Zamówienie: 13,
+      naWynos: false,
+      uNas: true,
+      Priorytet: false,
     },
   ],
   [
     "ProjektX14",
     {
       Nazwa: "Shop14",
-      Termin: new Date("2023/02/14"),
+      Termin: new Date("2023/12/14"),
       Metraż: "4mb, r.40",
       Wysyłka: "paczkomat",
       Zamówienie: 14,
+      naWynos: true,
+      uNas: false,
+      Priorytet: false,
     },
   ],
   [
     "ProjektX15",
     {
       Nazwa: "Shop15",
-      Termin: new Date("2023/03/15"),
+      Termin: new Date("2023/12/15"),
       Metraż: "4mb, r.40",
       Wysyłka: "paczkomat",
       Zamówienie: 15,
+      naWynos: false,
+      uNas: true,
+      Priorytet: false,
     },
   ],
   [
     "ProjektX16",
     {
       Nazwa: "Shop16",
-      Termin: new Date("2023/04/16"),
+      Termin: new Date("2023/12/16"),
       Metraż: "4mb, r.40",
       Wysyłka: "paczkomat",
       Zamówienie: 16,
+      naWynos: false,
+      uNas: true,
+      Priorytet: false,
     },
   ],
   [
     "ProjektX17",
     {
       Nazwa: "Shop17",
-      Termin: new Date("2023/12/11"),
+      Termin: new Date("2023/12/17"),
       Metraż: "4mb, r.40",
       Wysyłka: "paczkomat",
       Zamówienie: 17,
+      naWynos: false,
+      uNas: true,
+      Priorytet: false,
     },
   ],
   [
     "ProjektX18",
     {
       Nazwa: "Shop18",
-      Termin: new Date("2024/06/18"),
+      Termin: new Date("2023/12/18"),
       Metraż: "4mb, r.40",
       Wysyłka: "paczkomat",
       Zamówienie: 18,
+      naWynos: true,
+      uNas: false,
+      Priorytet: false,
     },
   ],
   [
     "ProjektX19",
     {
       Nazwa: "Shop19",
-      Termin: new Date("2024/07/10"),
+      Termin: new Date("2023/12/19"),
       Metraż: "4mb, r.40",
       Wysyłka: "paczkomat",
       Zamówienie: 9919,
+      naWynos: false,
+      uNas: true,
+      Priorytet: true,
     },
   ],
 ];
 
+interface ProjectDetails {
+  Nazwa: string;
+  Termin: Date;
+  Metraż: string;
+  Wysyłka: string;
+  Zamówienie: number;
+  naWynos: boolean;
+  uNas: boolean;
+  Priorytet: boolean;
+}
+
+const formatDate = (date: Date) => {
+  return format(date, "dd/MM/yyyy");
+};
+
+const isTodayProject = (projectDate: Date) => {
+  const today = new Date();
+  return (
+    projectDate.getDate() === today.getDate() &&
+    projectDate.getMonth() === today.getMonth() &&
+    projectDate.getFullYear() === today.getFullYear()
+  );
+};
+
+const isThisWeekProject = (projectDate: Date) => {
+  const today = new Date();
+  const currentDayOfWeek = today.getDay();
+  const startOfWeek = new Date(today);
+  startOfWeek.setDate(
+    today.getDate() - currentDayOfWeek + (currentDayOfWeek === 0 ? -7 : 1)
+  );
+  const endOfWeek = new Date(today);
+  endOfWeek.setDate(startOfWeek.getDate() + 5);
+  return projectDate >= startOfWeek && projectDate <= endOfWeek;
+};
+
 export const OrderList = () => {
   const [searchProject, setSearchProject] = useState("");
-  const [selectedButton, setSelectedButton] = useState("");
-  const [isWeekSelected, setIsWeekSelected] = useState(false);
-  const [active, setActive] = useState(false);
+  const [selectedTodayButton, setSelectedTodayButton] = useState("");
+  const [isWeekSelected, setIsWeekSelected] = useState("");
+  const [selectedHereButton, setSelectedHereButton] = useState(false);
+  const [selectedToGoButton, setSelectedToGOButton] = useState(false);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchProject(event.target.value);
   };
 
   const handleTodayButton = () => {
-    if (selectedButton === "Na dziś") {
-      setSelectedButton("");
-      setActive(!active);
+    if (selectedTodayButton) {
+      setSelectedTodayButton("");
     } else {
-      setSelectedButton("Na dziś");
+      setSelectedTodayButton("Na dziś");
+      setIsWeekSelected("");
     }
   };
 
   const handleWeekButton = () => {
-    setIsWeekSelected(!isWeekSelected);
+    if (isWeekSelected) {
+      setIsWeekSelected("");
+    } else {
+      setIsWeekSelected("Na tydzień");
+      setSelectedTodayButton("");
+    }
   };
 
-  // for Today
+  const handleHereButton = () => {
+    if (!selectedHereButton) {
+      setSelectedHereButton(true);
+      setSelectedToGOButton(false);
+    } else {
+      setSelectedHereButton(false);
+      setSelectedToGOButton(false);
+    }
+  };
 
-  const filteredProjects = exampleProjects.filter((project) => {
-    const { Nazwa, Termin, Metraż, Wysyłka, Zamówienie } = project[1];
+  const handleToGoButton = () => {
+    if (!selectedToGoButton) {
+      setSelectedToGOButton(true);
+      setSelectedHereButton(false);
+    } else {
+      setSelectedHereButton(false);
+      setSelectedToGOButton(false);
+    }
+  };
+
+  const filteredProjects = exampleProjects.filter(([_, project]) => {
+    const { Nazwa, Termin, Metraż, Wysyłka, Zamówienie, naWynos, uNas } =
+      project;
     const searchProjectLower = searchProject.toLowerCase();
     const terminFormatted = formatDate(Termin);
 
-    if (selectedButton === "Na dziś") {
-      let today = new Date();
-      const projectDate = new Date(Termin);
+    const isToday = selectedTodayButton && isTodayProject(Termin);
+    const isThisWeek = isWeekSelected && isThisWeekProject(Termin);
 
-      if (
-        projectDate.getDate() === today.getDate() &&
-        projectDate.getMonth() === today.getMonth() &&
-        projectDate.getFullYear() === today.getFullYear()
-      ) {
-        return (
-          Nazwa.toLowerCase().includes(searchProjectLower) ||
-          terminFormatted.includes(searchProjectLower) ||
-          Metraż.toLowerCase().includes(searchProjectLower) ||
-          Wysyłka.toLowerCase().includes(searchProjectLower) ||
-          Zamówienie.toString().includes(searchProjectLower)
-        );
-      }
-    } else {
-      return (
-        Nazwa.toLowerCase().includes(searchProjectLower) ||
-        terminFormatted.includes(searchProjectLower) ||
-        Metraż.toLowerCase().includes(searchProjectLower) ||
-        Wysyłka.toLowerCase().includes(searchProjectLower) ||
-        Zamówienie.toString().includes(searchProjectLower)
-      );
-    }
+    const isToGo = selectedToGoButton && naWynos;
+    const isHere = selectedHereButton && uNas;
+
+    const matchesSearch =
+      Nazwa.toLowerCase().includes(searchProjectLower) ||
+      terminFormatted.includes(searchProjectLower) ||
+      Metraż.toLowerCase().includes(searchProjectLower) ||
+      Wysyłka.toLowerCase().includes(searchProjectLower) ||
+      Zamówienie.toString().includes(searchProjectLower);
+
+    return (
+      (isToday || isThisWeek || (!selectedTodayButton && !isWeekSelected)) &&
+      (isToGo || isHere || (!selectedToGoButton && !selectedHereButton)) &&
+      matchesSearch
+    );
   });
-
-  // for Week
 
   return (
     <Wrapper>
@@ -292,12 +388,32 @@ export const OrderList = () => {
         />
         <ButtonPanel>
           <StyledButtons>
-            <ButtonNow onClick={handleTodayButton}>Na dziś</ButtonNow>
-            <ButtonWeek onClick={handleWeekButton}>Na tydzień</ButtonWeek>
+            <ButtonNow
+              onClick={handleTodayButton}
+              className={selectedTodayButton ? "active" : ""}
+            >
+              Na dziś
+            </ButtonNow>
+            <ButtonWeek
+              onClick={handleWeekButton}
+              className={isWeekSelected ? "active" : ""}
+            >
+              Na tydzień
+            </ButtonWeek>
           </StyledButtons>
           <StyledButtons>
-            <ButtonToGo>Na wynos</ButtonToGo>
-            <ButtonHere>U nas</ButtonHere>
+            <ButtonToGo
+              onClick={handleToGoButton}
+              className={selectedToGoButton ? "active" : ""}
+            >
+              Na wynos
+            </ButtonToGo>
+            <ButtonHere
+              onClick={handleHereButton}
+              className={selectedHereButton ? "active" : ""}
+            >
+              U nas
+            </ButtonHere>
           </StyledButtons>
         </ButtonPanel>
       </ControlPanel>
@@ -305,8 +421,10 @@ export const OrderList = () => {
         <ul>
           {filteredProjects.map(([projectName, project], index) => (
             <li key={index}>
-              <ProjectImage>{projectName}</ProjectImage>
-              <ProjectIems>
+              <ProjectImage className={project.Priorytet ? "priority" : ""}>
+                {projectName}
+              </ProjectImage>
+              <ProjectIems className={project.Priorytet ? "priority" : ""}>
                 <p>
                   <span className="label">Nazwa: </span>
                   <span className="value">{project.Nazwa}</span>

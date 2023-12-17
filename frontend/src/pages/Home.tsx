@@ -1,4 +1,4 @@
-import { OrderList } from "../features/calculators/components/OrderList";
+import { OrderList } from "../features/orderList/components/OrderList";
 
 const Home = () => {
   return (
