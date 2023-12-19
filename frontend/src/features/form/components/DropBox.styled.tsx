@@ -1,15 +1,9 @@
 import styled from "styled-components";
 
-export const Form = styled.form`
-  @media print {
-    @page {
-      margin-top: -1cm;
-    }
-  }
-`;
 export const DropBoxStyled = styled.div`
   padding: 16px;
   margin-top: 10px;
+  margin-bottom: 60px;
   border: 2px dashed rgb(229, 229, 229);
   border-radius: 15px;
   height: 400px;
@@ -101,11 +95,5 @@ export const RemoveIcon = styled.div`
 
   &:hover {
     color: #dc4c64;
-  }
-`;
-
-export const PrintBtn = styled.button`
-  @media print {
-    display: none;
   }
 `;

@@ -3,7 +3,6 @@ import { useDropzone } from "react-dropzone";
 import { useDispatch, useSelector } from "react-redux";
 import { setTotalLength } from "../../redux/actions";
 import {
-  Form,
   DropBoxStyled,
   DropBoxList,
   DropBoxElement,
@@ -11,61 +10,60 @@ import {
   DropBoxImage,
   DropBoxRemoveBtn,
   RemoveIcon,
-  PrintBtn,
   DropBoxInfo,
 } from "./DropBox.styled";
 
 export const DropBox = ({
   localTotalLength: propLocalTotalLength,
   setLocalTotalLength,
+  files,
+  setFiles,
 }) => {
-  const [files, setFiles] = useState([]);
   const [rejected, setRejected] = useState([]);
   const [imageInfo, setImageInfo] = useState({});
-  // const [localTotalLength, setLocalTotalLength] = useState(0);
 
   const dispatch = useDispatch();
   const totalLength = useSelector((state) => state.totalLength);
 
-  const onDrop = useCallback(
-    (acceptedFiles, rejectedFiles) => {
-      if (acceptedFiles?.length) {
-        const newFiles = acceptedFiles.filter(
-          (file) =>
-            !files.some((existingFile) => existingFile.name === file.name)
-        );
-        const updatedFiles = newFiles.map((file) => {
-          const reader = new FileReader();
+  const loadImageInfo = async (file) => {
+    return new Promise((resolve) => {
+      const imageElement = new window.Image();
+      imageElement.onload = () => {
+        const length = imageElement.height;
+        const copies = "1";
+        resolve({ length, copies });
+      };
+      imageElement.src = URL.createObjectURL(file);
+    });
+  };
 
-          reader.onload = () => {
-            const imageElement = new window.Image();
-            imageElement.onload = () => {
-              const length = imageElement.height;
-              const copies = "1";
+  const onDrop = async (acceptedFiles, rejectedFiles) => {
+    if (acceptedFiles?.length) {
+      const newFiles = acceptedFiles.filter(
+        (file) => !files.some((existingFile) => existingFile.name === file.name)
+      );
 
-              setImageInfo((prevImageInfo) => ({
-                ...prevImageInfo,
-                [file.name]: { length: length, copies: copies },
-              }));
-            };
-            imageElement.src = reader.result;
-          };
+      const updatedFiles = await Promise.all(
+        newFiles.map(async (file) => {
+          const { length, copies } = await loadImageInfo(file);
 
-          reader.readAsDataURL(file);
+          setImageInfo((prevImageInfo) => ({
+            ...prevImageInfo,
+            [file.name]: { length, copies },
+          }));
 
           return Object.assign(file, { preview: URL.createObjectURL(file) });
-        });
+        })
+      );
 
-        setFiles((previousFiles) => [...previousFiles, ...updatedFiles]);
-      }
+      setFiles((previousFiles) => [...previousFiles, ...updatedFiles]);
+    }
 
-      if (rejectedFiles?.length) {
-        setRejected((previousFiles) => [...previousFiles, ...rejectedFiles]);
-        console.log("Wrong type of file");
-      }
-    },
-    [files]
-  );
+    if (rejectedFiles?.length) {
+      setRejected((previousFiles) => [...previousFiles, ...rejectedFiles]);
+      console.log("Wrong type of file");
+    }
+  };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: {
@@ -99,7 +97,7 @@ export const DropBox = ({
 
     setLocalTotalLength(totalLengthTimesCopies);
     dispatch(setTotalLength(totalLengthTimesCopies));
-  }, [dispatch, imageInfo]);
+  }, [dispatch, imageInfo, setLocalTotalLength]);
 
   const handleChange = (event, fileName) => {
     setImageInfo((prevImageInfo) => ({
@@ -111,22 +109,8 @@ export const DropBox = ({
     }));
   };
 
-  const handlePrint = () => {
-    window.print();
-  };
-
-  const formatPxToMb = (nbInPixels) => {
-    const nbInMeters = Number(nbInPixels * 0.000091).toLocaleString(undefined, {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
-    return nbInMeters;
-  };
-
-  console.log("totallength", totalLength);
-
   return (
-    <Form>
+    <>
       <DropBoxStyled {...getRootProps()}>
         <input {...getInputProps()} />
         {files.length > 0 ? (
@@ -161,9 +145,6 @@ export const DropBox = ({
           ))}
         </DropBoxList>
       </DropBoxStyled>
-      <PrintBtn type="button" onClick={handlePrint}>
-        Wydrukuj
-      </PrintBtn>
-    </Form>
+    </>
   );
 };
