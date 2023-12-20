@@ -100,11 +100,14 @@ export const DropBox = ({
   }, [dispatch, imageInfo, setLocalTotalLength]);
 
   const handleChange = (event, fileName) => {
+    const inputValue = event.target.value;
+    const copiesValue = inputValue > 0 ? inputValue : "1";
+
     setImageInfo((prevImageInfo) => ({
       ...prevImageInfo,
       [fileName]: {
         ...prevImageInfo[fileName],
-        copies: event.target.value,
+        copies: copiesValue,
       },
     }));
   };
