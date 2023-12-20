@@ -6,7 +6,7 @@ export const Length: React.FC = () => {
   const totalLength = useSelector((state: RootState) => state.totalLength);
 
   const formatPxToMb = (nbInPixels: number) => {
-    const nbInMeters = Number(nbInPixels * 0.000091).toLocaleString(undefined, {
+    const nbInMeters = Number(nbInPixels * 0.000085).toLocaleString(undefined, {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     });
