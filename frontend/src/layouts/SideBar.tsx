@@ -15,6 +15,7 @@ export const SideBar = () => {
           </li>
           <li>
             <Calculators />
+            <Link to="/form">Formularz</Link>
           </li>
         </ul>
       </Aside>
