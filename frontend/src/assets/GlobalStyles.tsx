@@ -5,8 +5,6 @@ import "./vars.css";
 
 export const GlobalStyles = createGlobalStyle`
  body {
-    height: 100vh;
-    overflow-y: hidden;
     font-family: sans-serif;
     line-height: 1.5;
     box-sizing: border-box;

@@ -8,6 +8,7 @@ import { CalculatorNAW } from "./features/calculators/components/CalculatorNAW";
 
 const Home = React.lazy(() => import("./pages/Home"));
 const ExampleContent = React.lazy(() => import("./pages/ExamplePage"));
+const Form = React.lazy(() => import("./pages/Form"));
 
 export const App = () => {
   return (
@@ -17,6 +18,7 @@ export const App = () => {
           <Route element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="example" element={<ExampleContent />} />
+            <Route path="form" element={<Form />} />
             <Route path="kalkulator1" element={<CalculatorSBP />} />
             <Route path="kalkulator2" element={<CalculatorNNO />} />
             <Route path="kalkulator3" element={<CalculatorNOK />} />
