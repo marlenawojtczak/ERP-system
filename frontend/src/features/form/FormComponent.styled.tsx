@@ -53,9 +53,19 @@ export const Label = styled.label`
   margin-bottom: 2px;
   width: 150px;
 `;
+export const LabelNested = styled.label`
+  display: block;
+  margin-bottom: 2px;
+  width: 50px;
+`;
 
 export const Input = styled.input`
   width: 250px;
+  padding: 4px;
+  font-size: 12px;
+`;
+export const InputSmall = styled.input`
+  width: 50px;
   padding: 4px;
   font-size: 12px;
 `;
@@ -73,6 +83,25 @@ export const RadioGroup = styled.div`
   gap: 4px;
   margin-right: 12px;
 `;
+export const RadioGroupNested = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin-right: 12px;
+`;
+export const RadioGroupColumn = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  gap: 4px;
+  margin-right: 12px;
+
+  & > * {
+    align-items: start;
+  }
+`;
+
 export const RadioInput = styled.input`
   padding: 4px;
   font-size: 12px;
