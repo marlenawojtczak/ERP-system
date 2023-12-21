@@ -3,7 +3,7 @@
 - cd frontend
 - npm run dev
 
-## Bckend
+## Backend
 
 - cd backend
 - npm run start:dev
