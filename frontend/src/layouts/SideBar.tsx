@@ -14,6 +14,9 @@ export const SideBar = () => {
             <Link to="/example">Instrukcje dla developerów</Link>
           </li>
           <li>
+            <Link to="/form">Formularz</Link>
+          </li>
+          <li>
             <Calculators />
           </li>
           <li>

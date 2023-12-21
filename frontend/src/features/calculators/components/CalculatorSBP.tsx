@@ -102,7 +102,7 @@ export const CalculatorSBP = () => {
         Oblicz koszt
       </button>
       <p>
-        {grossPrice}zł (brutto) {netPrice}zł (netto)
+        {grossPrice}zł brutto ({netPrice}zł netto)
       </p>
     </>
   );

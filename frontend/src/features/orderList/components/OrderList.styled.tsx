@@ -72,17 +72,21 @@ export const ButtonToGo = styled(ButtonNow)``;
 export const ButtonHere = styled(ButtonWeek)``;
 
 export const ProjectList = styled.div`
-  height: 79vh;
-  overflow: auto;
+  height: 70vh;
+  overflow-y: auto;
 
   ul {
     display: flex;
     flex-wrap: wrap;
     gap: 30px;
+    margin-bottom: 5%;
   }
   .priority {
     border: 2px solid red;
     box-shadow: 1px 1px 10px red;
+  }
+  @media screen and (min-height: 900px) {
+    height: 75vh;
   }
 `;
 
