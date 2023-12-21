@@ -14,11 +14,19 @@ export const Wrapper = styled.div`
 export const Header = styled.header`
   background-color: #969696;
   grid-area: navbar;
+
+  @media print {
+    display: none;
+  }
 `;
 
 export const Aside = styled.aside`
   background-color: #aaaaaa;
   grid-area: sidebar;
+
+  @media print {
+    display: none;
+  }
 `;
 
 export const Main = styled.main`

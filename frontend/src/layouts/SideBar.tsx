@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Aside } from "./Layout.styled";
+import Calculators from "../pages/Calculators";
 
 export const SideBar = () => {
   return (
@@ -11,6 +12,15 @@ export const SideBar = () => {
           </li>
           <li>
             <Link to="/example">Instrukcje dla developerów</Link>
+          </li>
+          <li>
+            <Link to="/form">Formularz</Link>
+          </li>
+          <li>
+            <Calculators />
+          </li>
+          <li>
+            <Link to="/pricelist">Cennik</Link>
           </li>
         </ul>
       </Aside>
