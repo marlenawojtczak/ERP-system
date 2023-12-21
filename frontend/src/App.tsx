@@ -18,11 +18,11 @@ export const App = () => {
           <Route element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="example" element={<ExampleContent />} />
+            <Route path="form" element={<Form />} />
             <Route path="kalkulator1" element={<CalculatorSBP />} />
             <Route path="kalkulator2" element={<CalculatorNNO />} />
             <Route path="kalkulator3" element={<CalculatorNOK />} />
             <Route path="kalkulator4" element={<CalculatorNAW />} />
-            <Route path="form" element={<Form />} />
           </Route>
         </Routes>
       </Suspense>
