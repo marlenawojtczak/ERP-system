@@ -19,6 +19,9 @@ export const SideBar = () => {
           <li>
             <Calculators />
           </li>
+          <li>
+            <Link to="/pricelist">Cennik</Link>
+          </li>
         </ul>
       </Aside>
     </>
