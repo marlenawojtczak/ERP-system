@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Notiflix from "notiflix";
 import { DropBox } from "./components/DropBox";
 import {
   MainForm,
@@ -6,9 +7,13 @@ import {
   NoPrintableForm,
   FormGroup,
   Label,
+  LabelNested,
   Input,
+  InputSmall,
   TextArea,
   RadioGroup,
+  RadioGroupNested,
+  RadioGroupColumn,
   RadioInput,
   RadioLabel,
   PriorityButton,
@@ -23,18 +28,20 @@ interface FormData {
   shipment: string;
   roll: string;
   length: number;
-  welds: string;
+  welds: number;
   email: string;
   phone: string;
   mailbox: string;
   invoice: string;
+  nameInvoice: string;
   nip: string;
   address: string;
   shipmentAddress: string;
   paczkomat: string;
-  cost: string;
+  cost: number;
   comments: string;
   priority: boolean;
+  hereOrTogo: string;
 }
 
 export const FormComponent: React.FC = () => {
@@ -46,21 +53,23 @@ export const FormComponent: React.FC = () => {
     name: "",
     order: "",
     deadline: "",
-    shipment: "",
-    roll: "",
+    shipment: "Kurier",
+    roll: "30",
     length: localTotalLength,
-    welds: "",
+    welds: 0,
     email: "",
     phone: "",
-    mailbox: "",
-    invoice: "",
+    mailbox: "mailbox_option1",
+    invoice: "Nie",
+    nameInvoice: "",
     nip: "",
     address: "",
     shipmentAddress: "",
     paczkomat: "",
-    cost: "",
+    cost: 0,
     comments: "",
     priority: false,
+    hereOrTogo: "togo",
   };
 
   const [formData, setFormData] = useState<FormData>(InitialState);
@@ -76,10 +85,32 @@ export const FormComponent: React.FC = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
+
+    const cleanedValue = cleanInputValue(name, value);
+
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: cleanedValue,
     }));
+  };
+
+  const cleanInputValue = (name: string, value: string | number): string => {
+    const checkIfPositiveNumber = (value: any) => {
+      const numericValue =
+        typeof value === "number" ? value : parseInt(value, 10);
+      if (!/^\d+$/.test(String(numericValue)) || numericValue < 0) {
+        return "0";
+      }
+      return numericValue;
+    };
+
+    if (name === "cost") {
+      return String(checkIfPositiveNumber(value)).replace(",", ".");
+    } else if (name === "welds") {
+      return String(checkIfPositiveNumber(value));
+    }
+
+    return String(value);
   };
 
   const handleTogglePriority = () => {
@@ -90,14 +121,16 @@ export const FormComponent: React.FC = () => {
     setIsActive((prevIsActive) => !prevIsActive);
   };
 
-  const handlePrint = () => {
-    window.print();
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Form submitted:", formData);
-    handlePrint();
+
+    Notiflix.Notify.success("Zamówienie zostało zapisane", {
+      timeout: 1000,
+    });
+    setTimeout(() => {
+      window.print();
+    }, 1000);
   };
 
   const handleReset = () => {
@@ -113,6 +146,13 @@ export const FormComponent: React.FC = () => {
       maximumFractionDigits: 2,
     });
     return nbInMeters;
+  };
+
+  const amountFormatter = (amount: number) => {
+    return Number(amount).toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
   };
 
   return (
@@ -133,6 +173,7 @@ export const FormComponent: React.FC = () => {
               name="name"
               value={formData.name}
               onChange={handleInputChange}
+              placeholder="Google"
             />
           </FormGroup>
           <FormGroup>
@@ -153,6 +194,7 @@ export const FormComponent: React.FC = () => {
               name="deadline"
               value={formData.deadline}
               onChange={handleInputChange}
+              placeholder="12.06.2023"
             />
           </FormGroup>
           <FormGroup>
@@ -205,6 +247,7 @@ export const FormComponent: React.FC = () => {
               name="email"
               value={formData.email}
               onChange={handleInputChange}
+              placeholder="kowalski@gmail.com"
             />
           </FormGroup>
           <FormGroup>
@@ -215,6 +258,7 @@ export const FormComponent: React.FC = () => {
               name="phone"
               value={formData.phone}
               onChange={handleInputChange}
+              placeholder="555-444-777"
             />
           </FormGroup>
           <FormGroup>
@@ -314,68 +358,83 @@ export const FormComponent: React.FC = () => {
               <RadioLabel htmlFor="invoice_option2">Nie</RadioLabel>
             </RadioGroup>
           </FormGroup>
-          <p>Dane do faktury:</p>
-          <FormGroup>
-            <Label htmlFor="nip">NIP:</Label>
-            <Input
-              type="text"
-              id="nip"
-              name="nip"
-              value={formData.nip}
-              onChange={handleInputChange}
-            />
-          </FormGroup>
-          <FormGroup>
-            <Label htmlFor="address">Adres:</Label>
-            <Input
-              type="text"
-              id="address"
-              name="address"
-              value={formData.address}
-              onChange={handleInputChange}
-            />
-          </FormGroup>
-          <FormGroup>
-            <Label htmlFor="name">Nazwa firmy:</Label>
-            <Input
-              type="text"
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleInputChange}
-            />
-          </FormGroup>
-          <p>Dane do wysyłki:</p>
-          <FormGroup>
-            <Label htmlFor="shipmentAddress">Adres:</Label>
-            <Input
-              type="text"
-              id="shipmentAddress"
-              name="shipmentAddress"
-              value={formData.shipmentAddress}
-              onChange={handleInputChange}
-            />
-          </FormGroup>
+          {formData.invoice === "Tak" && (
+            <>
+              <p>Dane do faktury:</p>
+              <FormGroup>
+                <Label htmlFor="nip">NIP:</Label>
+                <Input
+                  type="text"
+                  id="nip"
+                  name="nip"
+                  value={formData.nip}
+                  onChange={handleInputChange}
+                  placeholder="022-41-11-111"
+                />
+              </FormGroup>
+              <FormGroup>
+                <Label htmlFor="address">Adres:</Label>
+                <Input
+                  type="text"
+                  id="address"
+                  name="address"
+                  value={formData.address}
+                  onChange={handleInputChange}
+                  placeholder="ul. Adresowa 10, 02-100 Warszawa"
+                />
+              </FormGroup>
+              <FormGroup>
+                <Label htmlFor="nameInvoice">Nazwa firmy:</Label>
+                <Input
+                  type="text"
+                  id="nameInvoice"
+                  name="nameInvoice"
+                  value={formData.nameInvoice}
+                  onChange={handleInputChange}
+                  placeholder="Google sp. z o.o."
+                />
+              </FormGroup>
+            </>
+          )}
+          {(formData.shipment === "Kurier" ||
+            formData.shipment === "Paczkomat") && <p>Dane do wysyłki:</p>}
 
-          <FormGroup>
-            <Label htmlFor="paczkomat">Nr Paczkomatu:</Label>
-            <Input
-              type="text"
-              id="paczkomat"
-              name="paczkomat"
-              value={formData.paczkomat}
-              onChange={handleInputChange}
-            />
-          </FormGroup>
+          {formData.shipment === "Kurier" && (
+            <FormGroup>
+              <Label htmlFor="shipmentAddress">Adres:</Label>
+              <Input
+                type="text"
+                id="shipmentAddress"
+                name="shipmentAddress"
+                value={formData.shipmentAddress}
+                onChange={handleInputChange}
+                placeholder="ul. Adresowa 10, 02-100 Warszawa"
+              />
+            </FormGroup>
+          )}
+          {formData.shipment === "Paczkomat" && (
+            <FormGroup>
+              <Label htmlFor="paczkomat">Nr Paczkomatu:</Label>
+              <Input
+                type="text"
+                id="paczkomat"
+                name="paczkomat"
+                value={formData.paczkomat}
+                onChange={handleInputChange}
+                placeholder="WAW17A"
+              />
+            </FormGroup>
+          )}
           <FormGroup>
             <Label htmlFor="cost">Koszt:</Label>
-            <Input
+            <InputSmall
               type="text"
               id="cost"
               name="cost"
-              value={formData.cost}
+              value={`${formData.cost}`.replace(".", ",")}
               onChange={handleInputChange}
             />
+            zł brutto ({amountFormatter(formData.cost / 1.23)} zł netto)
           </FormGroup>
           <FormGroup>
             <Label htmlFor="comments">Uwagi:</Label>
@@ -386,9 +445,95 @@ export const FormComponent: React.FC = () => {
               value={formData.comments}
               onChange={handleInputChange}
               rows={5}
-            >
-              Komentarz
-            </TextArea>
+              placeholder="Dajemy zniżkę 10% na kubki Clammers, ale tylko przy odbiorze osobistym."
+            ></TextArea>
+          </FormGroup>
+          <FormGroup>
+            {/* <Label htmlFor="hereOrTogo"></Label> */}
+            <RadioGroupColumn>
+              <RadioInput
+                type="radio"
+                id="togo"
+                name="hereOrTogo"
+                value="togo"
+                checked={formData.hereOrTogo === "togo"}
+                onChange={handleInputChange}
+              />
+
+              <RadioGroupNested>
+                <RadioLabel htmlFor="togo">Wydruki</RadioLabel>
+                {formData.hereOrTogo === "togo" && (
+                  <>
+                    <p>Metraż: {formatPxToMb(formData.length)} metrów</p>
+                    <FormGroup>
+                      <LabelNested htmlFor="roll">Rolka:</LabelNested>
+                      <RadioGroup>
+                        <RadioInput
+                          type="radio"
+                          id="30"
+                          name="roll"
+                          value="30"
+                          checked={formData.roll === "30"}
+                          onChange={handleInputChange}
+                        />
+                        <RadioLabel htmlFor="30">30</RadioLabel>
+                      </RadioGroup>
+                      <RadioGroup>
+                        <RadioInput
+                          type="radio"
+                          id="40"
+                          name="roll"
+                          value="40"
+                          checked={formData.roll === "40"}
+                          onChange={handleInputChange}
+                        />
+                        <RadioLabel htmlFor="40">40</RadioLabel>
+                      </RadioGroup>
+                      <RadioGroup>
+                        <RadioInput
+                          type="radio"
+                          id="60"
+                          name="roll"
+                          value="60"
+                          checked={formData.roll === "60"}
+                          onChange={handleInputChange}
+                        />
+                        <RadioLabel htmlFor="60">60</RadioLabel>
+                      </RadioGroup>
+                      <RadioGroup>
+                        <RadioInput
+                          type="radio"
+                          id="A3"
+                          name="roll"
+                          value="A3"
+                          checked={formData.roll === "A3"}
+                          onChange={handleInputChange}
+                        />
+                        <RadioLabel htmlFor="A3">A3</RadioLabel>
+                      </RadioGroup>
+                    </FormGroup>
+                  </>
+                )}
+              </RadioGroupNested>
+            </RadioGroupColumn>
+          </FormGroup>
+          <FormGroup>
+            <RadioGroupColumn>
+              <RadioInput
+                type="radio"
+                id="here"
+                name="hereOrTogo"
+                value="here"
+                checked={formData.hereOrTogo === "here"}
+                onChange={handleInputChange}
+              />
+              <RadioGroupNested>
+                <RadioLabel htmlFor="here">Odzież z nadrukiem</RadioLabel>
+                {formData.hereOrTogo === "here" && (
+                  <p>Zgrzewy: {formData.welds}</p>
+                )}
+              </RadioGroupNested>
+            </RadioGroupColumn>
           </FormGroup>
 
           <PriorityButton
