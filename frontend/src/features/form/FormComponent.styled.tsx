@@ -154,3 +154,14 @@ export const ResetButton = styled.button`
     color: white;
   }
 `;
+
+export const DateInput = styled.button`
+  width: 260px;
+  height: 26px;
+  background-color: white;
+  margin: 0;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  border: solid 1px grey;
+`;

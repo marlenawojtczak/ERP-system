@@ -1,5 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useState,
+  forwardRef,
+  Ref,
+  ButtonHTMLAttributes,
+} from "react";
 import Notiflix from "notiflix";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { DropBox } from "./components/DropBox";
 import {
   MainForm,
@@ -19,7 +27,12 @@ import {
   PriorityButton,
   ResetButton,
   SubmitButton,
+  DateInput,
 } from "./FormComponent.styled";
+
+interface DateInputProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  placeholderText?: string;
+}
 
 interface FormData {
   name: string;
@@ -74,6 +87,7 @@ export const FormComponent: React.FC = () => {
   };
 
   const [formData, setFormData] = useState<FormData>(InitialState);
+  console.log(formData);
 
   useEffect(() => {
     setFormData((prevData) => ({
@@ -124,7 +138,7 @@ export const FormComponent: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
+    // console.log("Form submitted:", formData);
 
     Notiflix.Notify.success("Zamówienie zostało zapisane", {
       timeout: 1000,
@@ -139,6 +153,13 @@ export const FormComponent: React.FC = () => {
     setIsActive(false);
     setLocalTotalLength(0);
     setFiles([]);
+  };
+
+  const handleDateChange = (date: any) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      deadline: date ? date.toISOString().split("T")[0] : "",
+    }));
   };
 
   useEffect(() => {
@@ -159,7 +180,7 @@ export const FormComponent: React.FC = () => {
       ...prevData,
       order: generatedOrderNumber,
     }));
-    console.log("Generated Order Number:", generatedOrderNumber);
+    // console.log("Generated Order Number:", generatedOrderNumber);
   }, [formData.name]); //Na razie updateuje się na zmianie nazwy, jak będzie backend to będzie trzeba dopisać adekwatną funkcję
 
   const formatPxToMb = (nbInPixels: number) => {
@@ -176,6 +197,28 @@ export const FormComponent: React.FC = () => {
       maximumFractionDigits: 2,
     });
   };
+
+  const ExampleCustomInput = forwardRef(
+    (
+      { value, onClick, placeholderText, ...rest }: DateInputProps,
+      ref: Ref<HTMLButtonElement>
+    ) => {
+      const handleDateClick = (
+        e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+      ) => {
+        e.preventDefault();
+        if (onClick) {
+          onClick(e);
+        }
+      };
+
+      return (
+        <DateInput onClick={handleDateClick} ref={ref} {...rest}>
+          {value || placeholderText}
+        </DateInput>
+      );
+    }
+  );
 
   return (
     <>
@@ -211,13 +254,14 @@ export const FormComponent: React.FC = () => {
           </FormGroup>
           <FormGroup>
             <Label htmlFor="deadline">Termin realizacji:</Label>
-            <Input
-              type="text"
-              id="deadline"
-              name="deadline"
-              value={formData.deadline}
-              onChange={handleInputChange}
-              placeholder="12.06.2023"
+            <DatePicker
+              // showIcon
+              selected={formData.deadline ? new Date(formData.deadline) : null}
+              onChange={handleDateChange}
+              dateFormat="dd.MM.yyyy"
+              customInput={
+                <ExampleCustomInput placeholderText="Wybierz datę" />
+              }
             />
           </FormGroup>
           <FormGroup>
