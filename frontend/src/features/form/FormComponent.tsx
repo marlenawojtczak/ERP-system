@@ -60,6 +60,7 @@ interface FormData {
 export const FormComponent: React.FC = () => {
   const [localTotalLength, setLocalTotalLength] = useState<number>(0);
   const [files, setFiles] = useState([]);
+  const [imageInfo, setImageInfo] = useState({});
   const [isActive, setIsActive] = useState<boolean>(false);
   const [orderNumber, setOrderNumber] = useState(1);
 
@@ -84,6 +85,7 @@ export const FormComponent: React.FC = () => {
     comments: "",
     priority: false,
     hereOrTogo: "togo",
+    imageInfo: imageInfo,
   };
 
   const [formData, setFormData] = useState<FormData>(InitialState);
@@ -95,6 +97,13 @@ export const FormComponent: React.FC = () => {
       length: localTotalLength,
     }));
   }, [localTotalLength]);
+
+  useEffect(() => {
+    setFormData((prevData) => ({
+      ...prevData,
+      imageInfo: imageInfo,
+    }));
+  }, [imageInfo]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -153,6 +162,7 @@ export const FormComponent: React.FC = () => {
     setIsActive(false);
     setLocalTotalLength(0);
     setFiles([]);
+    setImageInfo({});
   };
 
   const handleDateChange = (date: any) => {
@@ -229,6 +239,8 @@ export const FormComponent: React.FC = () => {
             setLocalTotalLength={setLocalTotalLength}
             files={files}
             setFiles={setFiles}
+            imageInfo={imageInfo}
+            setImageInfo={setImageInfo}
           />
           <FormGroup>
             <Label htmlFor="name">Nazwa:</Label>

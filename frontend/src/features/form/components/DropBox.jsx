@@ -18,9 +18,11 @@ export const DropBox = ({
   setLocalTotalLength,
   files,
   setFiles,
+  imageInfo,
+  setImageInfo,
 }) => {
   const [rejected, setRejected] = useState([]);
-  const [imageInfo, setImageInfo] = useState({});
+  // const [imageInfo, setImageInfo] = useState({});
 
   const dispatch = useDispatch();
   const totalLength = useSelector((state) => state.totalLength);
