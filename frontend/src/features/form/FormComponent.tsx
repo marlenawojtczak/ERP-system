@@ -48,6 +48,7 @@ export const FormComponent: React.FC = () => {
   const [localTotalLength, setLocalTotalLength] = useState<number>(0);
   const [files, setFiles] = useState([]);
   const [isActive, setIsActive] = useState<boolean>(false);
+  const [orderNumber, setOrderNumber] = useState(1);
 
   const InitialState = {
     name: "",
@@ -140,6 +141,27 @@ export const FormComponent: React.FC = () => {
     setFiles([]);
   };
 
+  useEffect(() => {
+    const generateOrderNumber = () => {
+      const today = new Date();
+      const formattedDate = `${today.getDate()}-${
+        today.getMonth() + 1
+      }-${today.getFullYear()}`;
+      const formattedOrderNumber = orderNumber.toString().padStart(3, "0");
+
+      setOrderNumber((prevOrderNumber) => prevOrderNumber + 1);
+
+      return `${formattedDate}_${formattedOrderNumber}`;
+    };
+
+    const generatedOrderNumber = generateOrderNumber();
+    setFormData((prevData) => ({
+      ...prevData,
+      order: generatedOrderNumber,
+    }));
+    console.log("Generated Order Number:", generatedOrderNumber);
+  }, [formData.name]); //Na razie updateuje się na zmianie nazwy, jak będzie backend to będzie trzeba dopisać adekwatną funkcję
+
   const formatPxToMb = (nbInPixels: number) => {
     const nbInMeters = Number(nbInPixels * 0.000085).toLocaleString(undefined, {
       minimumFractionDigits: 2,
@@ -184,6 +206,7 @@ export const FormComponent: React.FC = () => {
               name="order"
               value={formData.order}
               onChange={handleInputChange}
+              readOnly
             />
           </FormGroup>
           <FormGroup>
@@ -205,6 +228,7 @@ export const FormComponent: React.FC = () => {
               name="shipment"
               value={formData.shipment}
               onChange={handleInputChange}
+              readOnly
             />
           </FormGroup>
           <FormGroup>
@@ -215,6 +239,7 @@ export const FormComponent: React.FC = () => {
               name="roll"
               value={formData.roll}
               onChange={handleInputChange}
+              readOnly
             />
           </FormGroup>
           <FormGroup>
@@ -225,6 +250,7 @@ export const FormComponent: React.FC = () => {
               name="length"
               value={formatPxToMb(formData.length)}
               onChange={handleInputChange}
+              readOnly
             />
           </FormGroup>
           <FormGroup>
