@@ -70,7 +70,7 @@ export const FormComponent: React.FC = () => {
     order: "",
     deadline: null as Date | null,
     shipment: "Kurier",
-    roll: "30",
+    roll: "0",
     length: localTotalLength,
     welds: 0,
     email: "",
@@ -107,6 +107,23 @@ export const FormComponent: React.FC = () => {
     const { name, value } = e.target;
 
     const cleanedValue = cleanInputValue(name, value);
+
+    if (name === "hereOrTogo") {
+      if (value === "here") {
+        setFiles([]);
+        setImageInfo({}),
+          setLocalTotalLength(0),
+          setFormData((prevData) => ({
+            ...prevData,
+            roll: "0",
+          }));
+      } else {
+        setFormData((prevData) => ({
+          ...prevData,
+          welds: 0,
+        }));
+      }
+    }
 
     setFormData((prevData) => ({
       ...prevData,
@@ -216,9 +233,13 @@ export const FormComponent: React.FC = () => {
         }
       };
 
+      const placeholderStyle = {
+        color: "grey",
+      };
+
       return (
         <DateInput onClick={handleDateClick} ref={ref} {...rest}>
-          {value || placeholderText}
+          {value || <span style={placeholderStyle}>{placeholderText}</span>}
         </DateInput>
       );
     }
