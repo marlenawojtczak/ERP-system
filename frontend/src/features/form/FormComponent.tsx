@@ -64,7 +64,6 @@ export const FormComponent: React.FC = () => {
   const [files, setFiles] = useState([]);
   const [imageInfo, setImageInfo] = useState({});
   const [isActive, setIsActive] = useState<boolean>(false);
-  const [orderNumber, setOrderNumber] = useState(1);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
   const InitialState = {
@@ -92,7 +91,7 @@ export const FormComponent: React.FC = () => {
   };
 
   const [formData, setFormData] = useState<FormDataType>(InitialState);
-  console.log(formData);
+  // console.log(formData);
 
   const dispatch = useDispatch();
 
@@ -173,6 +172,9 @@ export const FormComponent: React.FC = () => {
     setTimeout(() => {
       window.print();
     }, 1000);
+    setTimeout(() => {
+      handleReset();
+    }, 2000);
   };
 
   const handleReset = () => {
@@ -182,32 +184,70 @@ export const FormComponent: React.FC = () => {
     setFiles([]);
     setImageInfo({});
     setSelectedDate(null);
+    fetchOrderNumber();
   };
 
   const handleDateChange = (date: any) => {
     setSelectedDate(date);
   };
 
-  useEffect(() => {
+  //start logic for generating order number
+  const fetchOrderNumber = async () => {
+    const getPrevNumber = () => {
+      const savedObjectsString = localStorage.getItem("savedObjects");
+
+      if (savedObjectsString) {
+        const savedObjects = JSON.parse(savedObjectsString);
+        const today = new Date();
+        const formattedToday = today
+          .toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+          })
+          .replace(/\//g, "-");
+
+        const filteredOrders = savedObjects.filter((order: FormDataType) =>
+          order.order.startsWith(formattedToday)
+        );
+
+        return filteredOrders.length;
+      } else {
+        return 0;
+      }
+    };
+
     const generateOrderNumber = () => {
       const today = new Date();
       const formattedDate = `${today.getDate()}-${
         today.getMonth() + 1
       }-${today.getFullYear()}`;
-      const formattedOrderNumber = orderNumber.toString().padStart(3, "0");
 
-      setOrderNumber((prevOrderNumber) => prevOrderNumber + 1);
+      const prevNum = getPrevNumber();
+      const orderNumber = prevNum + 1;
 
-      return `${formattedDate}_${formattedOrderNumber}`;
+      return `${formattedDate}_${(orderNumber ?? 0)
+        .toString()
+        .padStart(3, "0")}`;
     };
 
-    const generatedOrderNumber = generateOrderNumber();
+    const newOrderNumber = generateOrderNumber();
+    console.log("ORDER", newOrderNumber);
+
     setFormData((prevData) => ({
       ...prevData,
-      order: generatedOrderNumber,
+      order: newOrderNumber,
     }));
-    // console.log("Generated Order Number:", generatedOrderNumber);
-  }, [formData.name]); //Na razie updateuje się na zmianie nazwy, jak będzie backend to będzie trzeba dopisać adekwatną funkcję
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchOrderNumber();
+    };
+    fetchData();
+  }, []);
+
+  //////////end
 
   const formatPxToMb = (nbInPixels: number) => {
     const nbInMeters = Number(nbInPixels * 0.000085).toLocaleString(undefined, {
