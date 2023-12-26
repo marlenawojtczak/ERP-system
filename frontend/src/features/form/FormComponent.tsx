@@ -37,7 +37,7 @@ interface DateInputProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 interface FormData {
   name: string;
   order: string;
-  deadline: string;
+  deadline: Date | null;
   shipment: string;
   roll: string;
   length: number;
@@ -63,11 +63,12 @@ export const FormComponent: React.FC = () => {
   const [imageInfo, setImageInfo] = useState({});
   const [isActive, setIsActive] = useState<boolean>(false);
   const [orderNumber, setOrderNumber] = useState(1);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
   const InitialState = {
     name: "",
     order: "",
-    deadline: "",
+    deadline: null as Date | null,
     shipment: "Kurier",
     roll: "30",
     length: localTotalLength,
@@ -94,16 +95,11 @@ export const FormComponent: React.FC = () => {
   useEffect(() => {
     setFormData((prevData) => ({
       ...prevData,
+      deadline: selectedDate,
       length: localTotalLength,
-    }));
-  }, [localTotalLength]);
-
-  useEffect(() => {
-    setFormData((prevData) => ({
-      ...prevData,
       imageInfo: imageInfo,
     }));
-  }, [imageInfo]);
+  }, [selectedDate, localTotalLength, imageInfo]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -147,7 +143,7 @@ export const FormComponent: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // console.log("Form submitted:", formData);
+    console.log("Form submitted:", formData);
 
     Notiflix.Notify.success("Zamówienie zostało zapisane", {
       timeout: 1000,
@@ -163,13 +159,11 @@ export const FormComponent: React.FC = () => {
     setLocalTotalLength(0);
     setFiles([]);
     setImageInfo({});
+    setSelectedDate(null);
   };
 
   const handleDateChange = (date: any) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      deadline: date ? date.toISOString().split("T")[0] : "",
-    }));
+    setSelectedDate(date);
   };
 
   useEffect(() => {
@@ -266,9 +260,9 @@ export const FormComponent: React.FC = () => {
           </FormGroup>
           <FormGroup>
             <Label htmlFor="deadline">Termin realizacji:</Label>
+
             <DatePicker
-              // showIcon
-              selected={formData.deadline ? new Date(formData.deadline) : null}
+              selected={selectedDate}
               onChange={handleDateChange}
               dateFormat="dd.MM.yyyy"
               customInput={
