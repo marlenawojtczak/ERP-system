@@ -12,6 +12,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { DropBox } from "./components/DropBox";
 import {
+  GlobalPrintStyle,
   MainForm,
   PrintableForm,
   NoPrintableForm,
@@ -32,7 +33,9 @@ import {
   DateInput,
 } from "./FormComponent.styled";
 
-interface DateInputProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface DateInputProps {
+  value?: string;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   placeholderText?: string;
 }
 
@@ -281,11 +284,22 @@ export const FormComponent: React.FC = () => {
       const placeholderStyle = {
         color: "grey",
       };
+      const valueStyle = {
+        color: "black",
+      };
 
       return (
-        <DateInput onClick={handleDateClick} ref={ref} {...rest}>
-          {value || <span style={placeholderStyle}>{placeholderText}</span>}
-        </DateInput>
+        <>
+          <GlobalPrintStyle />
+          <DateInput onClick={handleDateClick} ref={ref} {...rest}>
+            <span
+              className={value ? undefined : "print-placeholder"}
+              style={value ? valueStyle : placeholderStyle}
+            >
+              {value || placeholderText}
+            </span>
+          </DateInput>
+        </>
       );
     }
   );
@@ -311,6 +325,7 @@ export const FormComponent: React.FC = () => {
               value={formData.name}
               onChange={handleInputChange}
               placeholder="Google"
+              className={formData.name !== "" ? undefined : "print-placeholder"}
             />
           </FormGroup>
           <FormGroup>
@@ -356,6 +371,9 @@ export const FormComponent: React.FC = () => {
               value={formData.roll}
               onChange={handleInputChange}
               readOnly
+              className={
+                formData.roll !== "0" ? undefined : "print-placeholder"
+              }
             />
           </FormGroup>
           <FormGroup>
@@ -367,6 +385,9 @@ export const FormComponent: React.FC = () => {
               value={formatPxToMb(formData.length)}
               onChange={handleInputChange}
               readOnly
+              className={
+                formData.length !== 0 ? undefined : "print-placeholder"
+              }
             />
           </FormGroup>
           <FormGroup>
@@ -377,6 +398,7 @@ export const FormComponent: React.FC = () => {
               name="welds"
               value={formData.welds}
               onChange={handleInputChange}
+              className={formData.welds !== 0 ? undefined : "print-placeholder"}
             />
           </FormGroup>
         </PrintableForm>

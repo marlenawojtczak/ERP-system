@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 
 interface TextAreaProps {
   type?: string;
@@ -6,6 +6,14 @@ interface TextAreaProps {
 interface PriorityButtonProps {
   isActive: boolean;
 }
+
+export const GlobalPrintStyle = createGlobalStyle`
+  @media print {
+    .print-placeholder {
+      color: transparent !important;
+    }
+  }
+`;
 
 export const MainForm = styled.form`
   display: flex;
