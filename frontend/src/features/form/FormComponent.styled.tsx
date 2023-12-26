@@ -164,4 +164,5 @@ export const DateInput = styled.button`
   display: flex;
   align-items: center;
   border: solid 1px grey;
+  color: ${(props) => (props.value ? "black" : "gray")};
 `;

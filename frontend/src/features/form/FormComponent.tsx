@@ -5,6 +5,8 @@ import React, {
   Ref,
   ButtonHTMLAttributes,
 } from "react";
+import { useDispatch } from "react-redux";
+import { saveObjectToLocalStorage } from "./redux/actions";
 import Notiflix from "notiflix";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -34,7 +36,7 @@ interface DateInputProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   placeholderText?: string;
 }
 
-interface FormData {
+export interface FormDataType {
   name: string;
   order: string;
   deadline: Date | null;
@@ -89,8 +91,10 @@ export const FormComponent: React.FC = () => {
     imageInfo: imageInfo,
   };
 
-  const [formData, setFormData] = useState<FormData>(InitialState);
+  const [formData, setFormData] = useState<FormDataType>(InitialState);
   console.log(formData);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setFormData((prevData) => ({
@@ -161,6 +165,7 @@ export const FormComponent: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Form submitted:", formData);
+    dispatch(saveObjectToLocalStorage(formData));
 
     Notiflix.Notify.success("Zamówienie zostało zapisane", {
       timeout: 1000,
