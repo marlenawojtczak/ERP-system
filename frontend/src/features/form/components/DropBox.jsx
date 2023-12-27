@@ -1,7 +1,5 @@
 import React, { useCallback, useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
-// import { useDispatch, useSelector } from "react-redux";
-// import { setTotalLength } from "../../redux/actions";
 import {
   DropBoxStyled,
   DropBoxList,
@@ -22,9 +20,6 @@ export const DropBox = ({
   setImageInfo,
 }) => {
   const [rejected, setRejected] = useState([]);
-
-  // const dispatch = useDispatch();
-  // const totalLength = useSelector((state) => state.totalLength);
 
   const loadImageInfo = async (file) => {
     return new Promise((resolve) => {
@@ -97,7 +92,6 @@ export const DropBox = ({
     );
 
     setLocalTotalLength(totalLengthTimesCopies);
-    // dispatch(setTotalLength(totalLengthTimesCopies));
   }, [imageInfo, setLocalTotalLength]);
 
   const handleChange = (event, fileName) => {
