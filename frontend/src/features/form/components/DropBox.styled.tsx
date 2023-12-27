@@ -6,7 +6,7 @@ export const DropBoxStyled = styled.div`
   margin-bottom: 60px;
   border: 2px dashed rgb(229, 229, 229);
   border-radius: 15px;
-  height: 550px;
+  height: 460px;
   width: 600px;
   display: flex;
   align-items: center;
@@ -19,8 +19,8 @@ export const DropBoxList = styled.ul`
   list-style: none;
   display: grid;
   grid-auto-flow: column dense;
-  grid-template-rows: 260px 260px;
-  grid-auto-columns: 90px;
+  grid-template-rows: 230px 230px;
+  grid-auto-columns: auto;
 `;
 export const DropBoxElement = styled.li`
   position: relative;
@@ -47,7 +47,7 @@ export const DropBoxImage = styled.img`
   border-radius: 0.375rem;
   display: block;
   margin: 0 auto;
-  max-height: 190px;
+  max-height: 160px;
   width: auto;
 `;
 
