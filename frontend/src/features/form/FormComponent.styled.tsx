@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 
 interface TextAreaProps {
   type?: string;
@@ -6,6 +6,14 @@ interface TextAreaProps {
 interface PriorityButtonProps {
   isActive: boolean;
 }
+
+export const GlobalPrintStyle = createGlobalStyle`
+  @media print {
+    .print-placeholder {
+      color: transparent !important;
+    }
+  }
+`;
 
 export const MainForm = styled.form`
   display: flex;
@@ -153,4 +161,16 @@ export const ResetButton = styled.button`
     background-color: #dc4c64;
     color: white;
   }
+`;
+
+export const DateInput = styled.button`
+  width: 260px;
+  height: 26px;
+  background-color: white;
+  margin: 0;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  border: solid 1px grey;
+  color: ${(props) => (props.value ? "black" : "gray")};
 `;

@@ -10,15 +10,15 @@ import {
   REGISTER,
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import lengthReducer from "../src/features/redux/length-reducer";
+import formReducer from "./features/form/redux/formReducer";
 
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: [],
+  whitelist: ["savedObjects"],
 };
 
-const persistedReducer = persistReducer(persistConfig, lengthReducer);
+const persistedReducer = persistReducer(persistConfig, formReducer);
 
 export const store = configureStore({
   reducer: persistedReducer,
