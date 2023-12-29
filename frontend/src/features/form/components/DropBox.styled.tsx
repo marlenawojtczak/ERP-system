@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const DropBoxStyled = styled.div`
   padding: 16px;
   margin-top: 10px;
-  margin-bottom: 60px;
+  margin-bottom: 30px;
   border: 2px dashed rgb(229, 229, 229);
   border-radius: 15px;
   height: 460px;
@@ -28,6 +28,10 @@ export const DropBoxElement = styled.li`
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
     0 4px 6px -2px rgba(0, 0, 0, 0.05);
   margin: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 
   &:nth-child(4n + 2) {
     grid-row: 1;
@@ -42,12 +46,21 @@ export const CopiesInput = styled.input`
   font-size: 30px;
   color: black;
 `;
+export const RollTypeInput = styled.input`
+  width: 100%;
+  margin-bottom: 0;
+  padding: 0;
+  text-align: center;
+  border: none;
+  font-size: 30px;
+  color: black;
+`;
 
 export const DropBoxImage = styled.img`
   border-radius: 0.375rem;
   display: block;
   margin: 0 auto;
-  max-height: 160px;
+  max-height: 130px;
   width: auto;
 `;
 
@@ -56,10 +69,11 @@ export const DropBoxRemoveBtn = styled.button`
   position: absolute;
   height: 26px;
   width: 26px;
-  top: 1.5rem;
+  top: 24px;
   right: 0;
   justify-content: center;
   align-items: center;
+  padding: 0;
   border-radius: 50%;
   border-width: 1px;
   border-color: transparent;

@@ -44,7 +44,7 @@ export interface FormDataType {
   order: string;
   deadline: Date | null;
   shipment: string;
-  roll: string;
+  // roll: string;
   length: number;
   welds: number;
   email: string;
@@ -74,7 +74,7 @@ export const FormComponent: React.FC = () => {
     order: "",
     deadline: null as Date | null,
     shipment: "Kurier",
-    roll: "0",
+    // roll: "0",
     length: localTotalLength,
     welds: 0,
     email: "",
@@ -94,7 +94,7 @@ export const FormComponent: React.FC = () => {
   };
 
   const [formData, setFormData] = useState<FormDataType>(InitialState);
-  // console.log(formData);
+  console.log(formData);
 
   const dispatch = useDispatch();
 
@@ -117,12 +117,11 @@ export const FormComponent: React.FC = () => {
     if (name === "hereOrTogo") {
       if (value === "here") {
         setFiles([]);
-        setImageInfo({}),
-          setLocalTotalLength(0),
-          setFormData((prevData) => ({
-            ...prevData,
-            roll: "0",
-          }));
+        setImageInfo({}), setLocalTotalLength(0);
+        // setFormData((prevData) => ({
+        //   ...prevData,
+        //   roll: "0",
+        // }));
       } else {
         setFormData((prevData) => ({
           ...prevData,
@@ -362,7 +361,7 @@ export const FormComponent: React.FC = () => {
               readOnly
             />
           </FormGroup>
-          <FormGroup>
+          {/* <FormGroup>
             <Label htmlFor="roll">Rolka:</Label>
             <Input
               type="text"
@@ -375,14 +374,14 @@ export const FormComponent: React.FC = () => {
                 formData.roll !== "0" ? undefined : "print-placeholder"
               }
             />
-          </FormGroup>
+          </FormGroup> */}
           <FormGroup>
             <Label htmlFor="length">Metraż:</Label>
             <Input
               type="text"
               id="length"
               name="length"
-              value={formatPxToMb(formData.length)}
+              value={formatPxToMb(formData.length) + ` metrów bieżących`}
               onChange={handleInputChange}
               readOnly
               className={
@@ -628,8 +627,10 @@ export const FormComponent: React.FC = () => {
                 <RadioLabel htmlFor="togo">Wydruki</RadioLabel>
                 {formData.hereOrTogo === "togo" && (
                   <>
-                    <p>Metraż: {formatPxToMb(formData.length)} metrów</p>
-                    <FormGroup>
+                    <p>
+                      Metraż: {formatPxToMb(formData.length)} metrów bieżących
+                    </p>
+                    {/* <FormGroup>
                       <LabelNested htmlFor="roll">Rolka:</LabelNested>
                       <RadioGroup>
                         <RadioInput
@@ -675,7 +676,7 @@ export const FormComponent: React.FC = () => {
                         />
                         <RadioLabel htmlFor="A3">A3</RadioLabel>
                       </RadioGroup>
-                    </FormGroup>
+                    </FormGroup> */}
                   </>
                 )}
               </RadioGroupNested>
