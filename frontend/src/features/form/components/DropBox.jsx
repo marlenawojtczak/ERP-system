@@ -30,9 +30,57 @@ export const DropBox = ({
         const length = imageElement.height;
         const width = imageElement.width;
         const copies = "1";
+
+        setImageInfo((prevImageInfo) => ({
+          ...prevImageInfo,
+          [file.name]: { length, width, copies },
+        }));
+
         resolve({ length, width, copies });
       };
       imageElement.src = URL.createObjectURL(file);
+    });
+  };
+
+  const createThumbnail = (file, maxWidth, maxHeight) => {
+    return new Promise((resolve) => {
+      const image = new Image();
+      image.onload = () => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+
+        const aspectRatio = image.width / image.height;
+        let newWidth = image.width;
+        let newHeight = image.height;
+
+        if (newWidth > maxWidth) {
+          newWidth = maxWidth;
+          newHeight = newWidth / aspectRatio;
+        }
+
+        if (newHeight > maxHeight) {
+          newHeight = 130;
+          newWidth = newHeight * aspectRatio;
+        }
+
+        canvas.width = newWidth;
+        canvas.height = newHeight;
+
+        // Use Lanczos resampling for higher quality
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = "high";
+
+        ctx.drawImage(image, 0, 0, newWidth, newHeight);
+
+        canvas.toBlob((blob) => {
+          const thumbnailFile = new File([blob], file.name, {
+            type: file.type,
+            lastModified: Date.now(),
+          });
+          resolve(thumbnailFile);
+        }, file.type);
+      };
+      image.src = URL.createObjectURL(file);
     });
   };
 
@@ -45,13 +93,15 @@ export const DropBox = ({
       const updatedFiles = await Promise.all(
         newFiles.map(async (file) => {
           const { length, width, copies } = await loadImageInfo(file);
+          const thumbnailFile = await createThumbnail(file, 100, 100);
 
-          setImageInfo((prevImageInfo) => ({
-            ...prevImageInfo,
-            [file.name]: { length, width, copies },
-          }));
-
-          return Object.assign(file, { preview: URL.createObjectURL(file) });
+          return Object.assign(thumbnailFile, {
+            preview: URL.createObjectURL(thumbnailFile),
+            originalFile: file,
+            width,
+            height: length,
+            copies,
+          });
         })
       );
 
@@ -73,8 +123,6 @@ export const DropBox = ({
   });
 
   const removeFile = (name) => {
-    const length = imageInfo[name] || 0;
-    const width = imageInfo[name] || 0;
     setFiles((prevFiles) => prevFiles.filter((file) => file.name !== name));
     setImageInfo((prevImageInfo) => {
       const newImageInfo = { ...prevImageInfo };
