@@ -28,7 +28,19 @@ model Order {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   name String
+  orderNumber String
   deadline DateTime
+  shippingDate DateTime
+  roll String
+  length String
+  welds String
+  email String 
+  phone String
+  mailbox String
+  cost String
+  comment String
+
+
 
   userId String @db.ObjectId
   user User @relation(fields: [userId], references: [id])
