@@ -5,6 +5,7 @@ import {
   DropBoxList,
   DropBoxElement,
   CopiesInput,
+  RollTypeInput,
   DropBoxImage,
   DropBoxRemoveBtn,
   RemoveIcon,
@@ -24,10 +25,13 @@ export const DropBox = ({
   const loadImageInfo = async (file) => {
     return new Promise((resolve) => {
       const imageElement = new window.Image();
+
       imageElement.onload = () => {
         const length = imageElement.height;
+        const width = imageElement.width;
         const copies = "1";
-        resolve({ length, copies });
+        const sourcePath = imageElement.src;
+        resolve({ length, width, copies, sourcePath });
       };
       imageElement.src = URL.createObjectURL(file);
     });
@@ -41,11 +45,13 @@ export const DropBox = ({
 
       const updatedFiles = await Promise.all(
         newFiles.map(async (file) => {
-          const { length, copies } = await loadImageInfo(file);
+          const { length, width, copies, sourcePath } = await loadImageInfo(
+            file
+          );
 
           setImageInfo((prevImageInfo) => ({
             ...prevImageInfo,
-            [file.name]: { length, copies },
+            [file.name]: { length, width, copies, sourcePath },
           }));
 
           return Object.assign(file, { preview: URL.createObjectURL(file) });
@@ -71,6 +77,7 @@ export const DropBox = ({
 
   const removeFile = (name) => {
     const length = imageInfo[name] || 0;
+    const width = imageInfo[name] || 0;
     setFiles((prevFiles) => prevFiles.filter((file) => file.name !== name));
     setImageInfo((prevImageInfo) => {
       const newImageInfo = { ...prevImageInfo };
@@ -107,6 +114,32 @@ export const DropBox = ({
     }));
   };
 
+  const formatPxToMbCalc = (nbInPixels) => {
+    const nbInMeters = Number(nbInPixels * 0.000085);
+    return nbInMeters;
+  };
+
+  const checkRollType = (widthPx) => {
+    const widthMb = formatPxToMbCalc(widthPx);
+    const lengthMb = formatPxToMbCalc(propLocalTotalLength);
+
+    if (lengthMb < 5.0) {
+      if (widthMb > 0.43) {
+        return "A3/R60";
+      } else if (widthMb > 0.3) {
+        return "A3/R40";
+      } else {
+        return "A3/R30";
+      }
+    } else if (widthMb > 0.43) {
+      return "R60";
+    } else if (widthMb > 0.3) {
+      return "R40";
+    } else {
+      return "R30";
+    }
+  };
+
   return (
     <>
       <DropBoxStyled {...getRootProps()}>
@@ -139,6 +172,15 @@ export const DropBox = ({
               >
                 <RemoveIcon>X</RemoveIcon>
               </DropBoxRemoveBtn>
+              <RollTypeInput
+                type="text"
+                name="roll"
+                value={
+                  imageInfo[file.name]
+                    ? checkRollType(imageInfo[file.name].width)
+                    : "0"
+                }
+              />
             </DropBoxElement>
           ))}
         </DropBoxList>

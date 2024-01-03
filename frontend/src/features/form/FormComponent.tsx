@@ -18,7 +18,6 @@ import {
   NoPrintableForm,
   FormGroup,
   Label,
-  LabelNested,
   Input,
   InputSmall,
   TextArea,
@@ -44,7 +43,6 @@ export interface FormDataType {
   order: string;
   deadline: Date | null;
   shipment: string;
-  roll: string;
   length: number;
   welds: number;
   email: string;
@@ -74,7 +72,6 @@ export const FormComponent: React.FC = () => {
     order: "",
     deadline: null as Date | null,
     shipment: "Kurier",
-    roll: "0",
     length: localTotalLength,
     welds: 0,
     email: "",
@@ -94,7 +91,7 @@ export const FormComponent: React.FC = () => {
   };
 
   const [formData, setFormData] = useState<FormDataType>(InitialState);
-  // console.log(formData);
+  console.log(formData);
 
   const dispatch = useDispatch();
 
@@ -117,12 +114,7 @@ export const FormComponent: React.FC = () => {
     if (name === "hereOrTogo") {
       if (value === "here") {
         setFiles([]);
-        setImageInfo({}),
-          setLocalTotalLength(0),
-          setFormData((prevData) => ({
-            ...prevData,
-            roll: "0",
-          }));
+        setImageInfo({}), setLocalTotalLength(0);
       } else {
         setFormData((prevData) => ({
           ...prevData,
@@ -250,7 +242,7 @@ export const FormComponent: React.FC = () => {
     fetchData();
   }, []);
 
-  //////////end
+  //end
 
   const formatPxToMb = (nbInPixels: number) => {
     const nbInMeters = Number(nbInPixels * 0.000085).toLocaleString(undefined, {
@@ -363,26 +355,12 @@ export const FormComponent: React.FC = () => {
             />
           </FormGroup>
           <FormGroup>
-            <Label htmlFor="roll">Rolka:</Label>
-            <Input
-              type="text"
-              id="roll"
-              name="roll"
-              value={formData.roll}
-              onChange={handleInputChange}
-              readOnly
-              className={
-                formData.roll !== "0" ? undefined : "print-placeholder"
-              }
-            />
-          </FormGroup>
-          <FormGroup>
             <Label htmlFor="length">Metraż:</Label>
             <Input
               type="text"
               id="length"
               name="length"
-              value={formatPxToMb(formData.length)}
+              value={formatPxToMb(formData.length) + ` metrów bieżących`}
               onChange={handleInputChange}
               readOnly
               className={
@@ -628,54 +606,9 @@ export const FormComponent: React.FC = () => {
                 <RadioLabel htmlFor="togo">Wydruki</RadioLabel>
                 {formData.hereOrTogo === "togo" && (
                   <>
-                    <p>Metraż: {formatPxToMb(formData.length)} metrów</p>
-                    <FormGroup>
-                      <LabelNested htmlFor="roll">Rolka:</LabelNested>
-                      <RadioGroup>
-                        <RadioInput
-                          type="radio"
-                          id="30"
-                          name="roll"
-                          value="30"
-                          checked={formData.roll === "30"}
-                          onChange={handleInputChange}
-                        />
-                        <RadioLabel htmlFor="30">30</RadioLabel>
-                      </RadioGroup>
-                      <RadioGroup>
-                        <RadioInput
-                          type="radio"
-                          id="40"
-                          name="roll"
-                          value="40"
-                          checked={formData.roll === "40"}
-                          onChange={handleInputChange}
-                        />
-                        <RadioLabel htmlFor="40">40</RadioLabel>
-                      </RadioGroup>
-                      <RadioGroup>
-                        <RadioInput
-                          type="radio"
-                          id="60"
-                          name="roll"
-                          value="60"
-                          checked={formData.roll === "60"}
-                          onChange={handleInputChange}
-                        />
-                        <RadioLabel htmlFor="60">60</RadioLabel>
-                      </RadioGroup>
-                      <RadioGroup>
-                        <RadioInput
-                          type="radio"
-                          id="A3"
-                          name="roll"
-                          value="A3"
-                          checked={formData.roll === "A3"}
-                          onChange={handleInputChange}
-                        />
-                        <RadioLabel htmlFor="A3">A3</RadioLabel>
-                      </RadioGroup>
-                    </FormGroup>
+                    <p>
+                      Metraż: {formatPxToMb(formData.length)} metrów bieżących
+                    </p>
                   </>
                 )}
               </RadioGroupNested>
