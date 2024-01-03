@@ -30,7 +30,8 @@ export const DropBox = ({
         const length = imageElement.height;
         const width = imageElement.width;
         const copies = "1";
-        resolve({ length, width, copies });
+        const sourcePath = imageElement.src;
+        resolve({ length, width, copies, sourcePath });
       };
       imageElement.src = URL.createObjectURL(file);
     });
@@ -44,11 +45,13 @@ export const DropBox = ({
 
       const updatedFiles = await Promise.all(
         newFiles.map(async (file) => {
-          const { length, width, copies } = await loadImageInfo(file);
+          const { length, width, copies, sourcePath } = await loadImageInfo(
+            file
+          );
 
           setImageInfo((prevImageInfo) => ({
             ...prevImageInfo,
-            [file.name]: { length, width, copies },
+            [file.name]: { length, width, copies, sourcePath },
           }));
 
           return Object.assign(file, { preview: URL.createObjectURL(file) });
