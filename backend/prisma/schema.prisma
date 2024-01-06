@@ -11,39 +11,87 @@ datasource db {
 }
 
 model User {
-  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  email String @unique
-  hash String
-  hashedRt String?
-  orders Order[]
+  email     String   @unique
+  hash      String
+  hashedRt  String?
+  // role      Role     @default(USER)
 
   @@map("users")
 }
 
+model Client {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  NIP         String   @unique
+  companyName String
+  firstName   String
+  lastName    String
+  email       String
+  phone       String
+  address     Address[]
+  // orders      Order[]
+
+  @@map("clients")
+}
+
 model Order {
-  id    String @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  name String
-  orderNumber String
-  deadline DateTime
-  shippingDate DateTime
-  roll String
-  length String
-  welds String
-  email String 
-  phone String
-  mailbox String
-  cost String
-  comment String
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  name        String
+  orderNumber String   @unique
+  priority    Boolean  @default(false)
+  deadline    DateTime
+  delivery    DeliveryType
+  address     Address[]
+  mailbox     Mailbox
+  invoice     Boolean  @default(false)
+  nameInvoice String   @ignore
+  length      String
+  welds       String
+  cost        String
+  comments    String
+  imagesInfo  ImageInfo[]
 
-
-
-  userId String @db.ObjectId
-  user User @relation(fields: [userId], references: [id])
+  // customer    Client   @relation(fields: [customerId], references: [id])
+  // customerId  String   @unique @db.ObjectId
   
   @@map("orders")
+}
+
+// enum Role {
+//   ADMIN
+//   MANAGER
+//   USER
+// }
+
+enum DeliveryType {
+  COURIER
+  PERSONAL
+  INPOSTPARCEL
+}
+
+enum Mailbox {
+  ORDERS
+  SHOP
+  FB
+}
+
+
+type Address {
+  street String
+  number String
+  city String
+  zipCode String
+}
+
+type ImageInfo {
+  url String
+  width String
+  length String
+  copies String
 }
