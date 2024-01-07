@@ -5,6 +5,7 @@ import { CalculatorSBP } from "./features/calculators/components/CalculatorSBP";
 import { CalculatorNNO } from "./features/calculators/components/CalculatorNNO";
 import { CalculatorNOK } from "./features/calculators/components/CalculatorNOK";
 import { CalculatorNAW } from "./features/calculators/components/CalculatorNAW";
+import { PriceCalculator } from "./features/exampleFetchDataFromPricesList";
 
 const Home = React.lazy(() => import("./pages/Home"));
 const ExampleContent = React.lazy(() => import("./pages/ExamplePage"));
@@ -25,6 +26,7 @@ export const App = () => {
             <Route path="kalkulator3" element={<CalculatorNOK />} />
             <Route path="kalkulator4" element={<CalculatorNAW />} />
             <Route path="pricelist" element={<PriceList />} />
+            <Route path="exampleFetchData" element={<PriceCalculator />} />
           </Route>
         </Routes>
       </Suspense>

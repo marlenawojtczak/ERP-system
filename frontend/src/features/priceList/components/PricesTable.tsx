@@ -15,13 +15,13 @@ interface PriceRow {
   childrenAvailable?: boolean;
 }
 
-const tableData: PriceRow[] = [
+const tshirtData: PriceRow[] = [
   {
     type: "koszulka ekonomiczna",
     version: "biała",
     quantity: ["1 do 4", "5 do 19", "20 do 39", "40 do 79", "80 do 200"],
     prices: [18, 16, 15, 14, 13],
-    xxxlAvailable: true,
+    xxxlAvailable: false,
     childrenAvailable: false,
   },
   {
@@ -29,40 +29,40 @@ const tableData: PriceRow[] = [
     version: "kolor",
     quantity: ["1 do 4", "5 do 19", "20 do 39", "40 do 79", "80 do 200"],
     prices: [20, 18, 17, 16, 15],
-    xxxlAvailable: true,
+    xxxlAvailable: false,
     childrenAvailable: false,
   },
   {
     type: "koszulka standardowa",
     version: "biała",
     quantity: ["1 do 4", "5 do 19", "20 do 39", "40 do 79", "80 do 200"],
-    prices: [22, 20, 19, 18, 17],
+    prices: [20, 18, 17, 16, 15],
     xxxlAvailable: false,
-    childrenAvailable: true,
+    childrenAvailable: false,
   },
   {
     type: "koszulka standardowa",
     version: "kolor",
     quantity: ["1 do 4", "5 do 19", "20 do 39", "40 do 79", "80 do 200"],
-    prices: [26, 24, 22, 21, 17],
+    prices: [22, 20, 19, 18, 17],
     xxxlAvailable: false,
-    childrenAvailable: true,
+    childrenAvailable: false,
   },
   {
     type: "koszulka premium",
     version: "biała",
     quantity: ["1 do 4", "5 do 19", "20 do 39", "40 do 79", "80 do 200"],
-    prices: [28, 26, 24, 23, 19],
-    xxxlAvailable: true,
-    childrenAvailable: true,
+    prices: [26, 24, 22, 21, 17],
+    xxxlAvailable: false,
+    childrenAvailable: false,
   },
   {
     type: "koszulka premium",
     version: "kolor",
     quantity: ["1 do 4", "5 do 19", "20 do 39", "40 do 79", "80 do 200"],
-    prices: [30, 28, 27, 25, 22],
-    xxxlAvailable: true,
-    childrenAvailable: true,
+    prices: [28, 26, 24, 23, 19],
+    xxxlAvailable: false,
+    childrenAvailable: false,
   },
 ];
 
@@ -71,32 +71,64 @@ const poloShirtData: PriceRow[] = [
     type: "koszulka polo standardowa 177g",
     version: "biała",
     quantity: ["1 do 4", "5 do 19", "20 do 39", "40 do 79", "80 do 200"],
-    prices: [38, 36, 34, 32, 30],
-    xxxlAvailable: true,
+    prices: [38, 38, 38, 38, 38],
+    xxxlAvailable: false,
     childrenAvailable: false,
   },
   {
     type: "koszulka polo standardowa 177g",
     version: "kolor",
     quantity: ["1 do 4", "5 do 19", "20 do 39", "40 do 79", "80 do 200"],
-    prices: [41, 39, 37, 35, 33],
-    xxxlAvailable: true,
+    prices: [41, 41, 41, 41, 41],
+    xxxlAvailable: false,
     childrenAvailable: false,
   },
   {
     type: "koszulka polo premium 223g",
     version: "biała",
     quantity: ["1 do 4", "5 do 19", "20 do 39", "40 do 79", "80 do 200"],
-    prices: [42, 40, 38, 36, 34],
-    xxxlAvailable: true,
+    prices: [42, 42, 42, 42, 42],
+    xxxlAvailable: false,
     childrenAvailable: false,
   },
   {
     type: "koszulka polo premium 223g",
     version: "kolor",
     quantity: ["1 do 4", "5 do 19", "20 do 39", "40 do 79", "80 do 200"],
-    prices: [46, 44, 42, 40, 38],
-    xxxlAvailable: true,
+    prices: [46, 46, 46, 46, 46],
+    xxxlAvailable: false,
+    childrenAvailable: false,
+  },
+  {
+    type: "koszulka polo FOTL standardowa",
+    version: "biała",
+    quantity: ["1 do 4", "5 do 19", "20 do 39", "40 do 79", "80 do 200"],
+    prices: [35, 35, 35, 35, 35],
+    xxxlAvailable: false,
+    childrenAvailable: false,
+  },
+  {
+    type: "koszulka polo FOTL standardowa",
+    version: "kolor",
+    quantity: ["1 do 4", "5 do 19", "20 do 39", "40 do 79", "80 do 200"],
+    prices: [38, 38, 38, 38, 38],
+    xxxlAvailable: false,
+    childrenAvailable: false,
+  },
+  {
+    type: "koszulka polo FOTL premium",
+    version: "biała/kolor",
+    quantity: ["1 do 4", "5 do 19", "20 do 39", "40 do 79", "80 do 200"],
+    prices: [50, 50, 50, 50, 50],
+    xxxlAvailable: false,
+    childrenAvailable: false,
+  },
+  {
+    type: "koszulka polo FOTL 35/65",
+    version: "biała/kolor",
+    quantity: ["1 do 4", "5 do 19", "20 do 39", "40 do 79", "80 do 200"],
+    prices: [49, 49, 49, 49, 49],
+    xxxlAvailable: false,
     childrenAvailable: false,
   },
 ];
@@ -106,25 +138,49 @@ const otherItemsData: PriceRow[] = [
     type: "bluza hoodie z zamkiem",
     version: "classic",
     quantity: ["1 do 4", "5 do 19", "20 do 39", "40 do 79", "80 do 200"],
-    prices: [90, 85, 80, 75, 70],
+    prices: [90, 90, 90, 90, 90],
   },
   {
     type: "bluza hoodie z zamkiem",
     version: "premium",
     quantity: ["1 do 4", "5 do 19", "20 do 39", "40 do 79", "80 do 200"],
-    prices: [100, 95, 90, 85, 80],
+    prices: [100, 100, 100, 100, 100],
+  },
+  {
+    type: "bluza hoodie bez zamka",
+    version: "classic",
+    quantity: ["1 do 4", "5 do 19", "20 do 39", "40 do 79", "80 do 200"],
+    prices: [80, 80, 80, 80, 80],
+  },
+  {
+    type: "bluza hoodie bez zamka",
+    version: "premium",
+    quantity: ["1 do 4", "5 do 19", "20 do 39", "40 do 79", "80 do 200"],
+    prices: [90, 90, 90, 90, 90],
+  },
+  {
+    type: "bluza bez kaptura i kieszeni",
+    version: "classic",
+    quantity: ["1 do 4", "5 do 19", "20 do 39", "40 do 79", "80 do 200"],
+    prices: [70, 70, 70, 70, 70],
+  },
+  {
+    type: "bluza bez kaptura i kieszeni",
+    version: "premium",
+    quantity: ["1 do 4", "5 do 19", "20 do 39", "40 do 79", "80 do 200"],
+    prices: [80, 80, 80, 80, 80],
   },
   {
     type: "kamizelka odblaskowa",
     version: "grubotkana",
     quantity: ["1 do 4", "5 do 19", "20 do 39", "40 do 79", "80 do 200"],
-    prices: [15, 14, 13, 12, 11],
+    prices: [15, 15, 15, 15, 15],
   },
   {
     type: "torba bawełniana",
     version: "ecru",
     quantity: ["1 do 4", "5 do 19", "20 do 39", "40 do 79", "80 do 200"],
-    prices: [6, 5.5, 5, 4.5, 4],
+    prices: [6, 6, 6, 6, 6],
   },
 ];
 
@@ -151,16 +207,28 @@ const printData: PriceRow[] = [
     type: "Nadruki",
     version: "mały",
     quantity: ["1 do 4", "5 do 19", "20 do 39", "40 do 79", "80 do 200"],
-    prices: [12, 10, 8, 8, 8],
+    prices: [12, 10, 10, 8, 8],
   },
 ];
 
 const combinedTableData = [
-  ...tableData,
+  ...tshirtData,
   ...poloShirtData,
   ...otherItemsData,
   ...printData,
 ];
+
+const jsonData = JSON.stringify(combinedTableData);
+localStorage.setItem("priceListData", jsonData);
+
+// console.log("jsonData:", jsonData);
+
+const jsonParsedData = JSON.parse(jsonData);
+localStorage.setItem("priceListData", JSON.stringify(jsonParsedData));
+const retrievedData = localStorage.getItem("priceListData");
+const priceListData = JSON.parse(retrievedData);
+const standardShirtData = priceListData[2];
+console.log("Dane koszulki standardowej:", standardShirtData);
 
 const PriceTable: React.FC = () => {
   return (
