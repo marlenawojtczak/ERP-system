@@ -51,9 +51,9 @@ model Order {
   mailbox     Mailbox
   invoice     Boolean  @default(false)
   nameInvoice String   @ignore
-  length      String
-  welds       String
-  cost        String
+  length      Int
+  welds       Int
+  cost        Int
   comments    String
   imagesInfo  ImageInfo[]
 

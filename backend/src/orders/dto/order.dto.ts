@@ -5,9 +5,9 @@ export class OrderDto {
   delivery: string;
   address: Array<any>;
   mailbox: string;
-  length: string;
-  welds: string;
-  cost: string;
+  length: number;
+  welds: number;
+  cost: number;
   comments: string;
   imagesInfo: Array<any>;
   // customerId: string;
