@@ -10,7 +10,7 @@ export class OrdersController {
   @Public()
   @Post('/')
   @HttpCode(HttpStatus.CREATED)
-  createOrder(@Body() dto: OrderDto): Promise<any> {
+  createOrder(@Body() dto: OrderDto): Promise<OrderDto> {
     return this.ordersService.createOrder(dto);
   }
 }

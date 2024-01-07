@@ -91,7 +91,7 @@ type Address {
 
 type ImageInfo {
   url String
-  width String
-  length String
-  copies String
+  width Int
+  length Int
+  copies Int
 }
