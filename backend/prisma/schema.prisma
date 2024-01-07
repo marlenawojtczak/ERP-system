@@ -35,3 +35,16 @@ model Order {
   
   @@map("orders")
 }
+
+model Price {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  type             String
+  version          String
+  prices           Int[]
+  xxxlAvailable    Boolean  @default(false)
+  childrenAvailable Boolean @default(false)
+
+  @@map("prices")
+}
