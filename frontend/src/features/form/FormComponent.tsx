@@ -1,13 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useState,
+  forwardRef,
+  Ref,
+  ButtonHTMLAttributes,
+} from "react";
+import { useDispatch } from "react-redux";
+import { saveObjectToLocalStorage } from "./redux/actions";
 import Notiflix from "notiflix";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { DropBox } from "./components/DropBox";
 import {
+  GlobalPrintStyle,
   MainForm,
   PrintableForm,
   NoPrintableForm,
   FormGroup,
   Label,
-  LabelNested,
   Input,
   InputSmall,
   TextArea,
@@ -19,14 +29,20 @@ import {
   PriorityButton,
   ResetButton,
   SubmitButton,
+  DateInput,
 } from "./FormComponent.styled";
 
-interface FormData {
+interface DateInputProps {
+  value?: string;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  placeholderText?: string;
+}
+
+export interface FormDataType {
   name: string;
   order: string;
-  deadline: string;
+  deadline: Date | null;
   shipment: string;
-  roll: string;
   length: number;
   welds: number;
   email: string;
@@ -47,14 +63,15 @@ interface FormData {
 export const FormComponent: React.FC = () => {
   const [localTotalLength, setLocalTotalLength] = useState<number>(0);
   const [files, setFiles] = useState([]);
+  const [imageInfo, setImageInfo] = useState({});
   const [isActive, setIsActive] = useState<boolean>(false);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
   const InitialState = {
     name: "",
     order: "",
-    deadline: "",
+    deadline: null as Date | null,
     shipment: "Kurier",
-    roll: "30",
     length: localTotalLength,
     welds: 0,
     email: "",
@@ -70,16 +87,22 @@ export const FormComponent: React.FC = () => {
     comments: "",
     priority: false,
     hereOrTogo: "togo",
+    imageInfo: imageInfo,
   };
 
-  const [formData, setFormData] = useState<FormData>(InitialState);
+  const [formData, setFormData] = useState<FormDataType>(InitialState);
+  console.log(formData);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setFormData((prevData) => ({
       ...prevData,
+      deadline: selectedDate,
       length: localTotalLength,
+      imageInfo: imageInfo,
     }));
-  }, [localTotalLength]);
+  }, [selectedDate, localTotalLength, imageInfo]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -87,6 +110,18 @@ export const FormComponent: React.FC = () => {
     const { name, value } = e.target;
 
     const cleanedValue = cleanInputValue(name, value);
+
+    if (name === "hereOrTogo") {
+      if (value === "here") {
+        setFiles([]);
+        setImageInfo({}), setLocalTotalLength(0);
+      } else {
+        setFormData((prevData) => ({
+          ...prevData,
+          welds: 0,
+        }));
+      }
+    }
 
     setFormData((prevData) => ({
       ...prevData,
@@ -124,6 +159,7 @@ export const FormComponent: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Form submitted:", formData);
+    dispatch(saveObjectToLocalStorage(formData));
 
     Notiflix.Notify.success("Zamówienie zostało zapisane", {
       timeout: 1000,
@@ -131,6 +167,9 @@ export const FormComponent: React.FC = () => {
     setTimeout(() => {
       window.print();
     }, 1000);
+    setTimeout(() => {
+      handleReset();
+    }, 2000);
   };
 
   const handleReset = () => {
@@ -138,7 +177,72 @@ export const FormComponent: React.FC = () => {
     setIsActive(false);
     setLocalTotalLength(0);
     setFiles([]);
+    setImageInfo({});
+    setSelectedDate(null);
+    fetchOrderNumber();
   };
+
+  const handleDateChange = (date: any) => {
+    setSelectedDate(date);
+  };
+
+  //start logic for generating order number
+  const fetchOrderNumber = async () => {
+    const getPrevNumber = () => {
+      const savedObjectsString = localStorage.getItem("savedObjects");
+
+      if (savedObjectsString) {
+        const savedObjects = JSON.parse(savedObjectsString);
+        const today = new Date();
+        const formattedToday = today
+          .toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+          })
+          .replace(/\//g, "-");
+
+        const filteredOrders = savedObjects.filter((order: FormDataType) =>
+          order.order.startsWith(formattedToday)
+        );
+
+        return filteredOrders.length;
+      } else {
+        return 0;
+      }
+    };
+
+    const generateOrderNumber = () => {
+      const today = new Date();
+      const formattedDate = `${today.getDate()}-${
+        today.getMonth() + 1
+      }-${today.getFullYear()}`;
+
+      const prevNum = getPrevNumber();
+      const orderNumber = prevNum + 1;
+
+      return `${formattedDate}_${(orderNumber ?? 0)
+        .toString()
+        .padStart(3, "0")}`;
+    };
+
+    const newOrderNumber = generateOrderNumber();
+    console.log("ORDER", newOrderNumber);
+
+    setFormData((prevData) => ({
+      ...prevData,
+      order: newOrderNumber,
+    }));
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchOrderNumber();
+    };
+    fetchData();
+  }, []);
+
+  //end
 
   const formatPxToMb = (nbInPixels: number) => {
     const nbInMeters = Number(nbInPixels * 0.000085).toLocaleString(undefined, {
@@ -155,6 +259,43 @@ export const FormComponent: React.FC = () => {
     });
   };
 
+  const ExampleCustomInput = forwardRef(
+    (
+      { value, onClick, placeholderText, ...rest }: DateInputProps,
+      ref: Ref<HTMLButtonElement>
+    ) => {
+      const handleDateClick = (
+        e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+      ) => {
+        e.preventDefault();
+        if (onClick) {
+          onClick(e);
+        }
+      };
+
+      const placeholderStyle = {
+        color: "grey",
+      };
+      const valueStyle = {
+        color: "black",
+      };
+
+      return (
+        <>
+          <GlobalPrintStyle />
+          <DateInput onClick={handleDateClick} ref={ref} {...rest}>
+            <span
+              className={value ? undefined : "print-placeholder"}
+              style={value ? valueStyle : placeholderStyle}
+            >
+              {value || placeholderText}
+            </span>
+          </DateInput>
+        </>
+      );
+    }
+  );
+
   return (
     <>
       <MainForm onSubmit={handleSubmit}>
@@ -164,6 +305,8 @@ export const FormComponent: React.FC = () => {
             setLocalTotalLength={setLocalTotalLength}
             files={files}
             setFiles={setFiles}
+            imageInfo={imageInfo}
+            setImageInfo={setImageInfo}
           />
           <FormGroup>
             <Label htmlFor="name">Nazwa:</Label>
@@ -174,6 +317,7 @@ export const FormComponent: React.FC = () => {
               value={formData.name}
               onChange={handleInputChange}
               placeholder="Google"
+              className={formData.name !== "" ? undefined : "print-placeholder"}
             />
           </FormGroup>
           <FormGroup>
@@ -184,17 +328,19 @@ export const FormComponent: React.FC = () => {
               name="order"
               value={formData.order}
               onChange={handleInputChange}
+              readOnly
             />
           </FormGroup>
           <FormGroup>
             <Label htmlFor="deadline">Termin realizacji:</Label>
-            <Input
-              type="text"
-              id="deadline"
-              name="deadline"
-              value={formData.deadline}
-              onChange={handleInputChange}
-              placeholder="12.06.2023"
+
+            <DatePicker
+              selected={selectedDate}
+              onChange={handleDateChange}
+              dateFormat="dd.MM.yyyy"
+              customInput={
+                <ExampleCustomInput placeholderText="Wybierz datę" />
+              }
             />
           </FormGroup>
           <FormGroup>
@@ -205,16 +351,7 @@ export const FormComponent: React.FC = () => {
               name="shipment"
               value={formData.shipment}
               onChange={handleInputChange}
-            />
-          </FormGroup>
-          <FormGroup>
-            <Label htmlFor="roll">Rolka:</Label>
-            <Input
-              type="text"
-              id="roll"
-              name="roll"
-              value={formData.roll}
-              onChange={handleInputChange}
+              readOnly
             />
           </FormGroup>
           <FormGroup>
@@ -223,8 +360,12 @@ export const FormComponent: React.FC = () => {
               type="text"
               id="length"
               name="length"
-              value={formatPxToMb(formData.length)}
+              value={formatPxToMb(formData.length) + ` metrów bieżących`}
               onChange={handleInputChange}
+              readOnly
+              className={
+                formData.length !== 0 ? undefined : "print-placeholder"
+              }
             />
           </FormGroup>
           <FormGroup>
@@ -235,6 +376,7 @@ export const FormComponent: React.FC = () => {
               name="welds"
               value={formData.welds}
               onChange={handleInputChange}
+              className={formData.welds !== 0 ? undefined : "print-placeholder"}
             />
           </FormGroup>
         </PrintableForm>
@@ -464,54 +606,9 @@ export const FormComponent: React.FC = () => {
                 <RadioLabel htmlFor="togo">Wydruki</RadioLabel>
                 {formData.hereOrTogo === "togo" && (
                   <>
-                    <p>Metraż: {formatPxToMb(formData.length)} metrów</p>
-                    <FormGroup>
-                      <LabelNested htmlFor="roll">Rolka:</LabelNested>
-                      <RadioGroup>
-                        <RadioInput
-                          type="radio"
-                          id="30"
-                          name="roll"
-                          value="30"
-                          checked={formData.roll === "30"}
-                          onChange={handleInputChange}
-                        />
-                        <RadioLabel htmlFor="30">30</RadioLabel>
-                      </RadioGroup>
-                      <RadioGroup>
-                        <RadioInput
-                          type="radio"
-                          id="40"
-                          name="roll"
-                          value="40"
-                          checked={formData.roll === "40"}
-                          onChange={handleInputChange}
-                        />
-                        <RadioLabel htmlFor="40">40</RadioLabel>
-                      </RadioGroup>
-                      <RadioGroup>
-                        <RadioInput
-                          type="radio"
-                          id="60"
-                          name="roll"
-                          value="60"
-                          checked={formData.roll === "60"}
-                          onChange={handleInputChange}
-                        />
-                        <RadioLabel htmlFor="60">60</RadioLabel>
-                      </RadioGroup>
-                      <RadioGroup>
-                        <RadioInput
-                          type="radio"
-                          id="A3"
-                          name="roll"
-                          value="A3"
-                          checked={formData.roll === "A3"}
-                          onChange={handleInputChange}
-                        />
-                        <RadioLabel htmlFor="A3">A3</RadioLabel>
-                      </RadioGroup>
-                    </FormGroup>
+                    <p>
+                      Metraż: {formatPxToMb(formData.length)} metrów bieżących
+                    </p>
                   </>
                 )}
               </RadioGroupNested>
