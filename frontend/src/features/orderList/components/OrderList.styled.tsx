@@ -90,15 +90,44 @@ export const ProjectList = styled.div`
   }
 `;
 
+// export const ProjectImage = styled.div`
+//   border: 2px solid black;
+//   border-radius: 5px;
+//   padding: 10px;
+//   margin-bottom: 10px;
+//   text-align: center;
+//   font-weight: 800;
+//   font-size: 22px;
+//   max-width: 300px;
+
+//   display: flex; /* Użyj flexbox do zarządzania układem obrazów */
+//   flex-wrap: wrap; /* Pozwala obrazom przechodzić do nowego wiersza, gdy brakuje miejsca */
+//   justify-content: center; /* Wycentruj obrazy */
+//   align-items: center; /* Wyrównaj obrazy pionowo */
+//   gap: 10px; /* Dodaj odstępy między obrazami */
+
+//   img {
+//     flex: 1; /* Pozwól obrazom na rozciąganie i kurczenie się */
+//     max-height: 100px; /* Ustaw maksymalną wysokość każdego obrazu */
+//     max-width: 100%; /* Ustaw maksymalną szerokość, aby zachować proporcje */
+//     height: auto; /* Utrzymaj proporcje obrazu */
+//     width: auto; /* Utrzymaj proporcje obrazu */
+//     object-fit: contain;
+//   }
+// `;
+
 export const ProjectImage = styled.div`
   border: 2px solid black;
-  border-radius: 5px;
-  height: 200px;
+  height: 350px;
+  width: 300px;
+  display: grid;
   padding: 10px;
   margin-bottom: 10px;
-  text-align: center;
-  font-weight: 800;
-  font-size: 22px;
+  grid-auto-flow: column dense;
+
+  gap: 10px;
+  img {
+  }
 `;
 
 export const ProjectIems = styled.div`
