@@ -11,12 +11,14 @@ import {
 import { PricesService } from './prices.service';
 import { ApiTags, ApiResponse } from '@nestjs/swagger';
 import { PricesDto } from './dto';
+import { Public } from '../common/decorators';
 
 @ApiTags('Prices')
 @Controller('prices')
 export class PricesController {
   constructor(private readonly pricesService: PricesService) {}
 
+  @Public()
   @Post()
   @ApiResponse({
     status: HttpStatus.CREATED,
@@ -38,6 +40,7 @@ export class PricesController {
     return this.pricesService.createPrice(dto);
   }
 
+  @Public()
   @Post('bulk')
   @ApiResponse({
     status: HttpStatus.CREATED,
@@ -55,11 +58,13 @@ export class PricesController {
     return this.pricesService.createManyPrices(dtos);
   }
 
+  @Public()
   @Get()
   findAll() {
     return this.pricesService.findAll();
   }
 
+  @Public()
   @Patch(':id')
   @ApiResponse({
     status: HttpStatus.OK,
@@ -81,6 +86,7 @@ export class PricesController {
     return this.pricesService.updatePrice(id, dto);
   }
 
+  @Public()
   @Delete(':id')
   @ApiResponse({
     status: HttpStatus.OK,
